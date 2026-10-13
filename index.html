@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice Maker</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  </head>
+  <body>
+    <div class="sticky-header">
+      <!-- Visibility of these buttons is controlled by `exports` in config.js -->
+      <div class="header-group-left">
+        <button class="btn" type="button" data-export="print">🖨️ Cetak / Print</button>
+        <button class="btn" type="button" data-export="xlsx">📊 Save as .xlsx</button>
+        <button class="btn" type="button" data-export="doc">📄 Save as .doc</button>
+        <button class="btn" type="button" data-export="pdf">📥 Save as .pdf</button>
+      </div>
+      <div class="header-group-right">
+        <div class="control-item">
+          <label for="logoSelect">Logo:</label>
+          <select id="logoSelect" class="header-select"></select>
+        </div>
+        <div class="control-item">
+          <label for="layoutSelect">Layout:</label>
+          <select id="layoutSelect" class="header-select"></select>
+        </div>
+        <button class="btn btn-primary" id="randomizeBtn" type="button">🔀 Randomize</button>
+      </div>
+    </div>
+
+    <!--
+      Zones ([data-zone]) are positioned by each layout's grid-template-areas in style.css.
+      Hideable pieces carry [data-section="key"]; keys are controlled from config.js.
+      Text, placeholders and meta rows are filled from config by main.js.
+    -->
+    <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
+      <div data-zone="brand">
+        <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" />
+        <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
+      </div>
+
+      <div data-zone="title">
+        <div id="invoiceTitle" data-section="title" class="invoice-title"></div>
+      </div>
+
+      <div data-zone="meta" id="metaZone"></div>
+
+      <div data-zone="items">
+        <table class="invoice-table" id="itemsTable">
+          <thead>
+            <tr>
+              <th data-label="no"></th>
+              <th data-label="description"></th>
+              <th data-label="amount"></th>
+              <th class="no-print"></th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <button class="btn btn-primary no-print add-row" id="addRowButton" type="button" data-label="addRow"></button>
+      </div>
+
+      <div data-zone="total">
+        <span data-label="total"></span>
+        <span id="totalDisplay"></span>
+      </div>
+
+      <div data-zone="terbilang" data-section="terbilang">
+        <strong data-label="terbilang"></strong>
+        <div class="terbilang-container">
+          <input type="text" id="terbilangField" class="editable" readonly />
+          <label class="terbilang-lock-wrapper no-print" title="Ceklis untuk mengunci input Terbilang">
+            <span data-label="lock"></span>
+            <input type="checkbox" id="terbilangLock" checked />
+          </label>
+        </div>
+      </div>
+
+      <div data-zone="transfer" data-section="transfer">
+        <strong data-label="transfer"></strong>
+        <textarea id="transferDetails" class="editable" rows="3"></textarea>
+      </div>
+
+      <div data-zone="signature">
+        <input type="text" id="signatureLocationDate" data-section="signatureDate" class="editable" />
+        <input type="text" id="signatureName" data-section="signatureName" class="editable" />
+      </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="layouts.config.js"></script>
+    <script src="utils.js"></script>
+    <script src="terbilang.js"></script>
+    <script src="exporters.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

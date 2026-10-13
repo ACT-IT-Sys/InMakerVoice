@@ -1,0 +1,218 @@
+/* ===== Tokens (layouts and skins override these on #invoiceSheet) ===== */
+:root {
+  --primary-color: #1e3a8a;
+  --border-color: #cbd5e1;
+  --accent-color: #3b82f6;
+  --tint: #f1f5f9;
+  --bg-color: #f8fafc;
+  --text-color: #334155;
+  --font-family: "Roboto", Arial, sans-serif;
+  --pad: 40px;
+  --gap: 20px;
+  --fs: 15px;
+  --cell-pad: 10px;
+  --side-w: 210px;
+  --label-w: 110px;
+  --meta-cols: 1fr;
+  --colon: ":";
+  --frame: 1px solid var(--border-color);
+}
+
+[hidden] { display: none !important; } /* config-driven hiding must beat any display rule */
+
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+input, textarea { font: inherit; color: inherit; text-align: inherit; }
+
+/* ===== Toolbar ===== */
+.sticky-header {
+  position: sticky; top: 0; z-index: 1000;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+  padding: 10px 20px; background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.header-group-left, .header-group-right { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+.header-group-right { margin-left: auto; }
+.control-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+.header-select { padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: #fff; font-size: 13px; cursor: pointer; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px;
+  background: #fff; border: 1px solid var(--border-color); border-radius: 6px;
+  cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s;
+}
+.btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+.btn-primary { background: var(--primary-color); color: #fff; border: none; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-delete { color: #ef4444; background: none; border: none; cursor: pointer; font-size: 16px; }
+
+/* ===== Sheet: a grid whose areas each layout redefines ===== */
+.invoice-container {
+  max-width: 900px; min-height: 1000px; margin: 30px auto; padding: var(--pad);
+  background: #fff; border: var(--frame); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-family); font-size: var(--fs);
+  display: grid; align-content: start;
+  grid-template-columns: minmax(0, 1fr) auto; /* default = Standard Classic */
+  grid-template-areas: "brand title" "meta meta" "items items" "total total" "terbilang terbilang" "transfer transfer" "signature signature";
+}
+
+[data-zone] { margin-bottom: var(--gap); }
+[data-zone="brand"] { grid-area: brand; }
+[data-zone="title"] { grid-area: title; }
+[data-zone="meta"] { grid-area: meta; }
+[data-zone="items"] { grid-area: items; margin-bottom: 0; }
+[data-zone="total"] { grid-area: total; }
+[data-zone="terbilang"] { grid-area: terbilang; }
+[data-zone="transfer"] { grid-area: transfer; }
+[data-zone="signature"] { grid-area: signature; }
+
+/* ===== Zone styles ===== */
+[data-zone="brand"] { display: flex; align-items: center; gap: 12px; }
+.invoice-logo { height: 45px; max-width: 120px; object-fit: contain; }
+.company-name-input { flex: 1; min-width: 0; font-size: 1.2em; font-weight: bold; color: #0f172a; }
+
+.invoice-title { font-size: 1.6em; font-weight: bold; letter-spacing: 2px; color: #000; text-align: right; }
+
+[data-zone="meta"] { display: grid; grid-template-columns: var(--meta-cols); gap: 10px 24px; }
+.meta-row { display: grid; grid-template-columns: var(--label-w) 1fr; align-items: center; }
+.meta-label { font-weight: bold; }
+.meta-value { display: flex; align-items: center; gap: 6px; }
+.meta-value::before { content: var(--colon); }
+.meta-value .editable { max-width: 400px; }
+
+[data-zone="total"] {
+  display: flex; justify-content: flex-end; gap: 16px; padding: var(--cell-pad); font-weight: bold;
+  border-top: var(--cell-h); border-bottom: var(--cell-h); border-left: var(--cell-v); border-right: var(--cell-v);
+}
+
+.terbilang-container { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-top: 5px; }
+.terbilang-lock-wrapper { display: flex; align-items: center; gap: 6px; font-size: 0.87em; color: #64748b; white-space: nowrap; user-select: none; cursor: pointer; }
+
+[data-zone="signature"] { justify-self: end; min-width: 250px; padding: 50px 10px 0 0; text-align: center; }
+#signatureName { margin-top: 70px; font-weight: bold; }
+
+/* Inline-editable fields (border reserved up front, so hover never shifts layout) */
+.editable { box-sizing: border-box; width: 100%; padding: 4px 8px; border: 0; border-bottom: 1px dashed transparent; background: transparent; resize: none; }
+.editable:not([readonly]):is(:hover, :focus) { border-bottom-color: #64748b; background: #f8fafc; outline: none; }
+
+/* ===== Table (borders, header and zebra come from the skin tokens) ===== */
+.invoice-table { width: 100%; border-collapse: collapse; }
+.invoice-table :is(th, td) {
+  padding: 0; border: 0;
+  border-top: var(--cell-h); border-bottom: var(--cell-h); border-left: var(--cell-v); border-right: var(--cell-v);
+}
+.invoice-table th { padding: var(--cell-pad); background: var(--th-bg); color: var(--th-fg); font-size: 0.93em; text-transform: uppercase; }
+.invoice-table th:nth-child(1) { width: 8%; }
+.invoice-table th:nth-child(2) { width: 62%; }
+.invoice-table th:nth-child(3) { width: 25%; }
+.invoice-table th:nth-child(4) { width: 5%; }
+.invoice-table tbody tr:nth-child(even) { background: var(--zebra); }
+.invoice-table td input { box-sizing: border-box; width: 100%; padding: var(--cell-pad); border: 0; background: transparent; }
+.invoice-table td input:focus { outline: 2px solid var(--accent-color); background: #fff; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.add-row { margin-top: 15px; }
+
+/* ===== Table skins ===== */
+[data-skin="classic"]   { --th-bg: var(--primary-color); --th-fg: #fff; --cell-v: 1px solid var(--border-color); --cell-h: 1px solid var(--border-color); --zebra: transparent; }
+[data-skin="band"]      { --th-bg: var(--primary-color); --th-fg: #fff; --cell-v: 0; --cell-h: 1px solid var(--border-color); --zebra: transparent; }
+[data-skin="boxed"]     { --th-bg: #fff; --th-fg: var(--primary-color); --cell-v: 2px solid var(--primary-color); --cell-h: 2px solid var(--primary-color); --zebra: transparent; }
+[data-skin="minimal"]   { --th-bg: var(--tint); --th-fg: var(--primary-color); --cell-v: 0; --cell-h: 0; --zebra: var(--tint); }
+[data-skin="editorial"] { --th-bg: #fff; --th-fg: var(--primary-color); --cell-v: 0; --cell-h: 1px solid var(--border-color); --zebra: transparent; }
+[data-skin="editorial"] th { font-variant: small-caps; text-transform: none; letter-spacing: 0.08em; border-bottom: 2px solid var(--primary-color); }
+
+/* ===== Layouts (Standard Classic = the default grid + tokens above) ===== */
+
+/* 2. Fit Two Bar: filled top band, 3-column meta strip, tinted bottom band */
+[data-layout="fit-two-bar"] {
+  --primary-color: #0f766e; --border-color: #99f6e4; --accent-color: #14b8a6; --tint: #f0fdfa;
+  --meta-cols: repeat(3, minmax(0, 1fr)); --label-w: auto;
+  border-top: 6px solid var(--primary-color); border-bottom: 6px solid var(--primary-color);
+  grid-template-areas: "brand title" "meta meta" "items items" "terbilang total" "transfer signature";
+}
+[data-layout="fit-two-bar"]::before { content: ""; grid-area: 1 / 1 / 2 / -1; margin: calc(-1 * var(--pad)) calc(-1 * var(--pad)) 0; background: var(--primary-color); }
+[data-layout="fit-two-bar"] :is([data-zone="brand"], [data-zone="title"]) { color: #fff; padding-bottom: calc(var(--pad) - var(--gap)); }
+[data-layout="fit-two-bar"] :is([data-zone="brand"], [data-zone="title"]) .editable:is(:hover, :focus) { background: rgb(255 255 255 / 0.15); }
+[data-layout="fit-two-bar"] :is([data-zone="brand"], [data-zone="title"]) ::placeholder { color: rgb(255 255 255 / 0.7); }
+[data-layout="fit-two-bar"] .invoice-title, [data-layout="fit-two-bar"] .company-name-input { color: inherit; }
+[data-layout="fit-two-bar"] :is([data-zone="terbilang"], [data-zone="total"]) { background: var(--tint); padding: 12px; }
+
+/* 3. Modern Corporate: sidebar cards (brand, meta, transfer) + main column */
+[data-layout="modern-corporate"] {
+  --primary-color: #312e81; --border-color: #c7d2fe; --accent-color: #6366f1; --tint: #eef2ff;
+  --colon: ""; border-radius: 12px;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "brand title" "meta items" "meta total" "meta terbilang" "transfer signature";
+}
+[data-layout="modern-corporate"] :is([data-zone="brand"], [data-zone="meta"], [data-zone="transfer"]) {
+  box-sizing: border-box; width: var(--side-w); margin-right: 24px; padding: 14px; background: var(--tint); border-radius: 8px;
+}
+[data-layout="modern-corporate"] .meta-row { grid-template-columns: 1fr; gap: 2px; }
+[data-layout="modern-corporate"] .meta-label { font-size: 0.8em; color: var(--primary-color); }
+[data-layout="modern-corporate"] .invoice-title { text-align: left; font-size: 2em; color: var(--primary-color); }
+
+/* 4. Bold Border: government-form boxes */
+[data-layout="bold-border"] {
+  --primary-color: #111827; --border-color: #374151; --accent-color: #4b5563;
+  --meta-cols: repeat(2, minmax(0, 1fr));
+  border: 3px solid var(--primary-color); column-gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "brand title" "meta meta" "items items" "terbilang total" "transfer signature";
+}
+[data-layout="bold-border"] :is([data-zone="brand"], [data-zone="title"], [data-zone="meta"], [data-zone="terbilang"], [data-zone="transfer"], [data-zone="signature"]) { padding: 10px 14px; border: 2px solid var(--primary-color); }
+[data-layout="bold-border"] [data-zone="signature"] { justify-self: stretch; }
+[data-layout="bold-border"] [data-zone="title"] { display: grid; place-items: center; }
+[data-layout="bold-border"] .invoice-title { text-align: center; }
+[data-layout="bold-border"] [data-section="kepada"] { grid-column: 1 / -1; }
+
+/* 5. Compact Clean: dense, Kepada left and Tanggal/Perihal right in the header block */
+[data-layout="compact-clean"] {
+  --primary-color: #b45309; --border-color: #fde68a; --accent-color: #d97706;
+  --pad: 25px; --gap: 12px; --fs: 13px; --cell-pad: 6px; --label-w: auto;
+  border-left: 5px solid var(--accent-color); row-gap: 4px;
+  grid-template-areas: "brand title" "kepada tanggal" "kepada perihal" "items items" "terbilang total" "transfer signature";
+}
+[data-layout="compact-clean"] [data-zone="meta"] { display: contents; } /* rows become grid items of the sheet */
+[data-layout="compact-clean"] [data-section="kepada"] { grid-area: kepada; }
+[data-layout="compact-clean"] [data-section="tanggal"] { grid-area: tanggal; }
+[data-layout="compact-clean"] [data-section="perihal"] { grid-area: perihal; }
+[data-layout="compact-clean"] :is([data-section="tanggal"], [data-section="perihal"]) { justify-self: end; text-align: right; }
+[data-layout="compact-clean"] [data-zone="signature"] { padding-top: 20px; }
+[data-layout="compact-clean"] #signatureName { margin-top: 40px; }
+
+/* 6. Elegant Serif: centered letterhead */
+[data-layout="elegant-serif"] {
+  --primary-color: #78350f; --border-color: #e7e5e4; --accent-color: #b45309;
+  --font-family: Georgia, serif; --meta-cols: repeat(2, minmax(0, 1fr)); --label-w: auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "brand" "title" "meta" "items" "total" "terbilang" "transfer" "signature";
+}
+[data-layout="elegant-serif"] [data-zone="brand"] { flex-direction: column; text-align: center; }
+[data-layout="elegant-serif"] .company-name-input { font-size: 1.5em; }
+[data-layout="elegant-serif"] .invoice-title { padding-bottom: 12px; border-bottom: 3px double var(--primary-color); font-style: italic; letter-spacing: 0.3em; text-align: center; }
+[data-layout="elegant-serif"] .meta-row { justify-content: center; }
+[data-layout="elegant-serif"] #totalDisplay { border-bottom: 3px double var(--primary-color); }
+[data-layout="elegant-serif"] [data-zone="terbilang"] { font-style: italic; text-align: center; }
+[data-layout="elegant-serif"] .terbilang-container { justify-content: center; }
+[data-layout="elegant-serif"] [data-zone="signature"] { justify-self: start; text-align: left; }
+
+/* ===== Export / print ===== */
+body.exporting .no-print { display: none !important; }
+body.exporting .invoice-container { --frame: none; box-shadow: none; }
+body.exporting .editable { border-color: transparent; background: transparent; }
+body.exporting ::placeholder { color: transparent; }
+
+@media print {
+  .no-print, .sticky-header { display: none !important; }
+  body { background: #fff; }
+  .invoice-container { --pad: 0px; --frame: none; max-width: none; min-height: 0; margin: 0; box-shadow: none; }
+  [data-zone] { break-inside: avoid; }
+  .editable { border-color: transparent; background: transparent; }
+  ::placeholder { color: transparent; }
+}
