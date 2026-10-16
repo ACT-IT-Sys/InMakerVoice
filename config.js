@@ -15,7 +15,7 @@ window.InvoiceConfig = {
   // Hideable keys are the [data-section] values in index.html. "items" and "total"
   // are protected (not hideable); unknown keys are ignored with a console warning.
   sections: {
-    logo: true,
+    logo: false,
     companyName: true,
     title: true,
     perihal: true,
