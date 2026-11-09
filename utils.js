@@ -12,6 +12,6 @@ window.Invoice = (() => {
     $$: (sel, root = document) => [...root.querySelectorAll(sel)],
     byId: (id) => document.getElementById(id),
     money: (n) => `${cfg.currency} ${n.toLocaleString(cfg.locale)}`,
-    state: { layout: null, sections: {} }, // runtime state; a future toggle panel edits `sections`
+    state: { layout: null, sections: {}, documentType: window.InvoiceConfig.defaultDocumentType }, // runtime state; a future toggle panel edits `sections`
   };
 })();

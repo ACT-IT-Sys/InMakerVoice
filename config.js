@@ -15,7 +15,7 @@ window.InvoiceConfig = {
   // Hideable keys are the [data-section] values in index.html. "items" and "total"
   // are protected (not hideable); unknown keys are ignored with a console warning.
   sections: {
-    logo: false,
+    logo: true,
     companyName: true,
     title: true,
     perihal: true,
@@ -79,4 +79,20 @@ window.InvoiceConfig = {
     { file: "img/L4.webp", name: "Logo 4" },
   ],
   defaultLogoFile: "L1.webp",
+
+  // Document modes. Each mode can override labels, sections (visibility), and filePrefix.
+  // Precedence for sections: global < layout < mode < runtime toggles.
+  defaultDocumentType: "invoice",
+  modes: {
+    invoice: {
+      filePrefix: "Invoice",
+      labels: { title: "INVOICE" },
+      sections: { transfer: true },
+    },
+    quotation: {
+      filePrefix: "Quotation",
+      labels: { title: "QUOTATION" },
+      sections: { transfer: false },
+    },
+  },
 };

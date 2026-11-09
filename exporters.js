@@ -2,7 +2,7 @@
 // respects section visibility, so hidden sections never reach any output.
 (() => {
   const { cfg, $, $$, byId, money, today, state } = Invoice;
-  const L = cfg.labels;
+  const L = () => ({ ...cfg.labels, ...(cfg.modes[state.documentType] || {}).labels });
   const sheet = byId("invoiceSheet");
   const DOC_COLUMNS = [["no", "center", 8], ["description", "left", 62], ["amount", "right", 30]];
 
@@ -25,6 +25,7 @@
       amount: parseFloat(tr.cells[2].firstElementChild.value) || 0,
     }));
     return {
+      documentType: state.documentType,
       company: on("companyName") ? val("companyNameInput") : "",
       title: on("title") ? byId("invoiceTitle").textContent : "",
       meta: cfg.metaFields.filter((f) => on(f.key)).map((f) => [f.label, val(f.key)]),
@@ -37,7 +38,10 @@
     };
   };
 
-  const fileName = (ext) => `${cfg.filePrefix}_${(val("companyNameInput") || cfg.filePrefix).replace(/\s+/g, "_")}.${ext}`;
+  const fileName = (ext) => {
+    const prefix = (cfg.modes[state.documentType] || {}).filePrefix || cfg.filePrefix;
+    return `${prefix}_${(val("companyNameInput") || prefix).replace(/\s+/g, "_")}.${ext}`;
+  };
 
   const download = (blob, name) => {
     const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: name });
@@ -60,19 +64,19 @@
       title: () => d.title && para(esc(d.title), `font-size:22pt;font-weight:bold;color:${v("--primary-color")};text-align:right`),
       meta: () => d.meta.length > 0 && `<table>${d.meta.map(([l, x]) => `<tr><td width="120"><b>${esc(l)}</b></td><td>: ${esc(x)}</td></tr>`).join("")}</table>`,
       items: () =>
-        `<table width="100%" style="border-collapse:collapse"><tr>${DOC_COLUMNS.map(([k, align, w]) => `<th width="${w}%" style="${th}text-align:${align}">${esc(L[k])}</th>`).join("")}</tr>` +
+        `<table width="100%" style="border-collapse:collapse"><tr>${DOC_COLUMNS.map(([k, align, w]) => `<th width="${w}%" style="${th}text-align:${align}">${esc(L()[k])}</th>`).join("")}</tr>` +
         d.rows.map((r) => `<tr><td style="${cell}text-align:center">${r.no}</td><td style="${cell}">${esc(r.desc)}</td><td style="${cell}text-align:right">${money(r.amount)}</td></tr>`).join("") +
         "</table>",
-      total: () => para(`<b>${esc(L.total)} ${money(d.total)}</b>`, "text-align:right"),
-      terbilang: () => d.terbilang !== null && para(`<b>${esc(L.terbilang)}</b> ${esc(d.terbilang)}`),
-      transfer: () => d.transfer !== null && para(`<b>${esc(L.transfer)}</b><br>${esc(d.transfer).replace(/\n/g, "<br>")}`),
+      total: () => para(`<b>${esc(L().total)} ${money(d.total)}</b>`, "text-align:right"),
+      terbilang: () => d.terbilang !== null && para(`<b>${esc(L().terbilang)}</b> ${esc(d.terbilang)}`),
+      transfer: () => d.transfer !== null && para(`<b>${esc(L().transfer)}</b><br>${esc(d.transfer).replace(/\n/g, "<br>")}`),
       signature: () =>
         (d.sigDate !== null || d.sigName !== null) &&
         para(`${esc(d.sigDate ?? "")}<br><br><br><br>${d.sigName === null ? "" : `<b>${esc(d.sigName || cfg.placeholders.signatureName)}</b>`}`, "text-align:right"),
     };
 
     const body = (state.layout.docOrder || cfg.docOrder).map((z) => zones[z]()).filter(Boolean).join("");
-    return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${esc(d.title || cfg.filePrefix)}</title><style>body{font-family:${cs.fontFamily}}</style></head><body>${body}</body></html>`;
+    return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${esc(d.title || ((cfg.modes[state.documentType] || {}).filePrefix || cfg.filePrefix))}</title><style>body{font-family:${cs.fontFamily}}</style></head><body>${body}</body></html>`;
   };
 
   // Every export runs the same wrapper: fill defaults, switch on "exporting" styles, always restore.
@@ -109,15 +113,16 @@
 
     xlsx: run(() => {
       const d = collect();
+      const labels = L();
       const aoa = [
         [d.title, "", d.company],
         [],
         ...d.meta.map(([l, x]) => [l, `: ${x}`]),
         [],
-        [L.no, L.description, L.amount],
+        [labels.no, labels.description, labels.amount],
         ...d.rows.map((r) => [r.no, r.desc, r.amount]),
-        ["", L.total, d.total],
-        ...(d.terbilang === null ? [] : [[], [L.terbilang, d.terbilang]]),
+        ["", labels.total, d.total],
+        ...(d.terbilang === null ? [] : [[], [labels.terbilang, d.terbilang]]),
       ];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Invoice Data");

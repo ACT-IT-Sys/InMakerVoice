@@ -6,6 +6,7 @@
   const tableBody = byId("tableBody");
   const logoSelect = byId("logoSelect");
   const layoutSelect = byId("layoutSelect");
+  const modeSelect = byId("modeSelect");
   const lock = byId("terbilangLock");
   const terbilangField = byId("terbilangField");
 
@@ -13,8 +14,15 @@
     el.innerHTML = items.map((i) => `<option value="${i[key]}"${i[key] === selected ? " selected" : ""}>${i.name}</option>`).join("");
   };
 
+  const getActiveMode = () => cfg.modes[state.documentType] || cfg.modes.invoice;
+
+  const updateLabels = () => {
+    const labels = { ...cfg.labels, ...getActiveMode().labels };
+    $$("[data-label]").forEach((el) => (el.textContent = labels[el.dataset.label]));
+    byId("invoiceTitle").textContent = labels.title;
+  };
+
   const buildContent = () => {
-    $$("[data-label]").forEach((el) => (el.textContent = L[el.dataset.label]));
     byId("metaZone").innerHTML = cfg.metaFields
       .map(
         (f) => `<div class="meta-row" data-section="${f.key}">
@@ -23,7 +31,6 @@
         </div>`,
       )
       .join("");
-    byId("invoiceTitle").textContent = L.title;
     byId("companyNameInput").value = cfg.defaultCompany;
     Object.entries({
       companyNameInput: P.company,
@@ -33,13 +40,20 @@
     }).forEach(([id, text]) => (byId(id).placeholder = text));
     fillSelect(logoSelect, cfg.logos, "file", cfg.defaultLogoFile);
     fillSelect(layoutSelect, cfg.layouts, "id", cfg.defaultLayoutId);
+    fillSelect(
+      modeSelect,
+      Object.entries(cfg.modes).map(([id, m]) => ({ id, name: id.charAt(0).toUpperCase() + id.slice(1) })),
+      "id",
+      cfg.defaultDocumentType,
+    );
     $$("[data-export]").forEach((btn) => (btn.hidden = cfg.exports[btn.dataset.export] === false));
+    updateLabels();
   };
 
-  // ---- visibility: global config < layout override < runtime toggles (state.sections) ----
-  const resolveSections = (layout) => {
+  // ---- visibility: global config < layout override < mode override < runtime toggles (state.sections) ----
+  const resolveSections = (layout, mode) => {
     const keys = $$("[data-section]").map((el) => el.dataset.section);
-    const merged = { ...cfg.sections, ...layout.sections };
+    const merged = { ...cfg.sections, ...layout.sections, ...mode.sections };
     Object.keys(merged)
       .filter((k) => !keys.includes(k))
       .forEach((k) => console.warn(`Invoice: section "${k}" is protected or unknown; flag ignored.`));
@@ -59,7 +73,14 @@
   const applyLayout = () => {
     state.layout = cfg.layouts.find((l) => l.id === layoutSelect.value) || cfg.layouts[0];
     Object.assign(sheet.dataset, { layout: state.layout.id, skin: state.layout.skin });
-    state.sections = resolveSections(state.layout);
+    state.sections = resolveSections(state.layout, getActiveMode());
+    applyVisibility();
+  };
+
+  const applyMode = () => {
+    state.documentType = modeSelect.value;
+    updateLabels();
+    state.sections = resolveSections(state.layout || cfg.layouts[0], getActiveMode());
     applyVisibility();
   };
 
@@ -101,9 +122,11 @@
   addRow();
   applyLogo();
   applyLayout();
+  applyMode();
 
   logoSelect.addEventListener("change", applyLogo);
   layoutSelect.addEventListener("change", applyLayout);
+  modeSelect.addEventListener("change", applyMode);
   byId("randomizeBtn").addEventListener("click", randomize);
   byId("addRowButton").addEventListener("click", addRow);
   lock.addEventListener("change", () => (terbilangField.readOnly = lock.checked));
