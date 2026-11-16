@@ -234,6 +234,15 @@ textarea {
   gap: 15px;
   margin-top: 5px;
 }
+#terbilangField {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .terbilang-lock-wrapper {
   display: flex;
   align-items: center;

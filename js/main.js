@@ -13,6 +13,12 @@
   const terbilangField = byId("terbilangField");
   const transferInput = byId("transferDetails");
 
+  // Terbilang wraps onto as many lines as needed so the full amount in words is always visible.
+  const fitTerbilang = () => {
+    terbilangField.style.height = "auto";
+    if (terbilangField.scrollHeight) terbilangField.style.height = `${terbilangField.scrollHeight}px`;
+  };
+
   const fillSelect = (el, items, key, selected) => {
     el.innerHTML = items.map((i) => `<option value="${i[key]}"${i[key] === selected ? " selected" : ""}>${i.name}</option>`).join("");
   };
@@ -73,6 +79,7 @@
       if (kids.length) zone.hidden = kids.every((k) => k.hidden);
     });
     logoSelect.closest(".control-item").hidden = !state.sections.logo;
+    fitTerbilang();
   };
 
   const applyLayout = () => {
@@ -133,6 +140,7 @@
     const total = $$(".amount-input").reduce((sum, i) => sum + num(i.value), 0);
     byId("totalDisplay").textContent = money(total);
     if (lock.checked) terbilangField.value = `${terbilang(total)} ${cfg.currencyWord}`;
+    fitTerbilang();
   };
 
   // Live thousand separators (same locale as #totalDisplay), keeping the caret next to the same digit.
@@ -175,6 +183,9 @@
     }
   });
   logoFile.addEventListener("change", loadLogo);
+  terbilangField.addEventListener("input", fitTerbilang);
+  window.addEventListener("resize", fitTerbilang);
+  window.addEventListener("beforeprint", fitTerbilang);
   layoutSelect.addEventListener("change", applyLayout);
   modeSelect.addEventListener("change", applyMode);
   byId("randomizeBtn").addEventListener("click", randomize);
