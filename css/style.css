@@ -167,6 +167,13 @@ textarea {
   max-width: 120px;
   object-fit: contain;
 }
+.invoice-logo {
+  cursor: pointer;
+}
+.invoice-logo:hover {
+  outline: 2px dashed var(--accent-color);
+  outline-offset: 3px;
+}
 .company-name-input {
   flex: 1;
   min-width: 0;
@@ -307,6 +314,9 @@ textarea {
   border: 0;
   background: transparent;
 }
+.invoice-table td .amount-input {
+  text-align: right;
+}
 .invoice-table td input:focus {
   outline: 2px solid var(--accent-color);
   background: #fff;
@@ -399,7 +409,14 @@ textarea {
   color: rgb(255 255 255 / 0.7);
 }
 [data-layout="fit-two-bar"] .invoice-title,
-[data-layout="fit-two-bar"] .company-name-input {
+[data-layout="fit-two-bar"] .invoice-logo {
+  cursor: pointer;
+}
+.invoice-logo:hover {
+  outline: 2px dashed var(--accent-color);
+  outline-offset: 3px;
+}
+.company-name-input {
   color: inherit;
 }
 [data-layout="fit-two-bar"] :is([data-zone="terbilang"], [data-zone="total"]) {
@@ -490,7 +507,7 @@ textarea {
   --label-w: auto;
   border-left: 5px solid var(--accent-color);
   row-gap: 4px;
-  grid-template-areas: "brand title" "kepada tanggal" "kepada perihal" "items items" "terbilang total" "transfer signature";
+  grid-template-areas: "brand title" "kepada tanggal" "kepada perihal" "kepada extra" "items items" "terbilang total" "transfer signature";
 }
 [data-layout="compact-clean"] [data-zone="meta"] {
   display: contents;
@@ -504,8 +521,11 @@ textarea {
 [data-layout="compact-clean"] [data-section="perihal"] {
   grid-area: perihal;
 }
+[data-layout="compact-clean"] :is([data-section="jatuhTempo"], [data-section="berlakuHingga"]) {
+  grid-area: extra;
+}
 [data-layout="compact-clean"]
-  :is([data-section="tanggal"], [data-section="perihal"]) {
+  :is([data-section="tanggal"], [data-section="perihal"], [data-section="jatuhTempo"], [data-section="berlakuHingga"]) {
   justify-self: end;
   text-align: right;
 }
@@ -531,7 +551,14 @@ textarea {
   flex-direction: column;
   text-align: center;
 }
-[data-layout="elegant-serif"] .company-name-input {
+[data-layout="elegant-serif"] .invoice-logo {
+  cursor: pointer;
+}
+.invoice-logo:hover {
+  outline: 2px dashed var(--accent-color);
+  outline-offset: 3px;
+}
+.company-name-input {
   font-size: 1.5em;
 }
 [data-layout="elegant-serif"] .invoice-title {
@@ -560,6 +587,9 @@ textarea {
 }
 
 /* ===== Export / print ===== */
+body.exporting .invoice-logo {
+  outline: none;
+}
 body.exporting .no-print {
   display: none !important;
 }
@@ -576,6 +606,9 @@ body.exporting ::placeholder {
 }
 
 @media print {
+  @page {
+    margin: 0;
+  }
   .no-print,
   .sticky-header {
     display: none !important;
@@ -584,12 +617,12 @@ body.exporting ::placeholder {
     background: #fff;
   }
   .invoice-container {
-    --pad: 0px;
     --frame: none;
     max-width: none;
     min-height: 0;
     margin: 0;
     box-shadow: none;
+    box-decoration-break: clone;
   }
   [data-zone] {
     break-inside: avoid;

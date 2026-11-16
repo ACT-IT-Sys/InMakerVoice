@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice Maker</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
@@ -41,7 +41,7 @@
     -->
     <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
       <div data-zone="brand">
-        <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" />
+        <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" role="button" tabindex="0" />
         <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
       </div>
 
@@ -93,11 +93,13 @@
       </div>
     </div>
 
-    <script src="config.js"></script>
-    <script src="layouts.config.js"></script>
-    <script src="utils.js"></script>
-    <script src="terbilang.js"></script>
-    <script src="exporters.js"></script>
-    <script src="main.js"></script>
+    <input type="file" id="logoFile" accept="image/*" hidden />
+
+    <script src="js/config.js"></script>
+    <script src="js/layouts.config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/terbilang.js"></script>
+    <script src="js/exporters.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

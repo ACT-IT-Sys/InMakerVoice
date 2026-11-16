@@ -1,7 +1,7 @@
 // Print / PDF / .doc / .xlsx. All formats read one collect() snapshot that already
 // respects section visibility, so hidden sections never reach any output.
 (() => {
-  const { cfg, $, $$, byId, money, today, state } = Invoice;
+  const { cfg, $, $$, byId, money, today, state, num } = Invoice;
   const L = () => ({ ...cfg.labels, ...(cfg.modes[state.documentType] || {}).labels });
   const sheet = byId("invoiceSheet");
   const DOC_COLUMNS = [["no", "center", 8], ["description", "left", 62], ["amount", "right", 30]];
@@ -22,13 +22,13 @@
     const rows = $$("#tableBody tr").map((tr) => ({
       no: $(".index-cell", tr).textContent,
       desc: tr.cells[1].firstElementChild.value,
-      amount: parseFloat(tr.cells[2].firstElementChild.value) || 0,
+      amount: num(tr.cells[2].firstElementChild.value),
     }));
     return {
       documentType: state.documentType,
       company: on("companyName") ? val("companyNameInput") : "",
       title: on("title") ? byId("invoiceTitle").textContent : "",
-      meta: cfg.metaFields.filter((f) => on(f.key)).map((f) => [f.label, val(f.key)]),
+      meta: cfg.metaFields.filter((f) => on(f.key)).map((f) => [L()["meta_" + f.key] || f.key, val(f.key)]),
       rows,
       total: rows.reduce((sum, r) => sum + r.amount, 0),
       terbilang: pick("terbilang", "terbilangField"),

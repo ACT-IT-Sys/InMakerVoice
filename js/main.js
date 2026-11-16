@@ -1,14 +1,17 @@
 // UI orchestration: builds config-driven content, applies layout/visibility, wires events.
 (() => {
-  const { cfg, $$, byId, money, today, state, terbilang, exporters } = Invoice;
-  const { labels: L, placeholders: P } = cfg;
+  const { cfg, $$, byId, money, today, state, terbilang, exporters, num, fmt } = Invoice;
+  const { placeholders: P } = cfg;
   const sheet = byId("invoiceSheet");
   const tableBody = byId("tableBody");
   const logoSelect = byId("logoSelect");
+  const logoPreview = byId("logoPreview");
+  const logoFile = byId("logoFile");
   const layoutSelect = byId("layoutSelect");
   const modeSelect = byId("modeSelect");
   const lock = byId("terbilangLock");
   const terbilangField = byId("terbilangField");
+  const transferInput = byId("transferDetails");
 
   const fillSelect = (el, items, key, selected) => {
     el.innerHTML = items.map((i) => `<option value="${i[key]}"${i[key] === selected ? " selected" : ""}>${i.name}</option>`).join("");
@@ -17,16 +20,19 @@
   const getActiveMode = () => cfg.modes[state.documentType] || cfg.modes.invoice;
 
   const updateLabels = () => {
-    const labels = { ...cfg.labels, ...getActiveMode().labels };
-    $$("[data-label]").forEach((el) => (el.textContent = labels[el.dataset.label]));
+    const mode = getActiveMode();
+    const labels = { ...cfg.labels, ...mode.labels };
+    $$("[data-label]").forEach((el) => (el.textContent = labels[el.dataset.label] ?? ""));
     byId("invoiceTitle").textContent = labels.title;
+    transferInput.placeholder = { ...P, ...mode.placeholders }.transfer;
+    logoPreview.title = labels.logoPick;
   };
 
   const buildContent = () => {
     byId("metaZone").innerHTML = cfg.metaFields
       .map(
         (f) => `<div class="meta-row" data-section="${f.key}">
-          <span class="meta-label">${f.label}</span>
+          <span class="meta-label" data-label="meta_${f.key}"></span>
           <span class="meta-value"><input type="text" id="${f.key}" class="editable" placeholder="${f.placeholder ?? today()}"></span>
         </div>`,
       )
@@ -34,7 +40,6 @@
     byId("companyNameInput").value = cfg.defaultCompany;
     Object.entries({
       companyNameInput: P.company,
-      transferDetails: P.transfer,
       signatureName: P.signatureName,
       signatureLocationDate: `${cfg.signatureCity}, ${today()}`,
     }).forEach(([id, text]) => (byId(id).placeholder = text));
@@ -42,7 +47,7 @@
     fillSelect(layoutSelect, cfg.layouts, "id", cfg.defaultLayoutId);
     fillSelect(
       modeSelect,
-      Object.entries(cfg.modes).map(([id, m]) => ({ id, name: id.charAt(0).toUpperCase() + id.slice(1) })),
+      Object.keys(cfg.modes).map((id) => ({ id, name: id.charAt(0).toUpperCase() + id.slice(1) })),
       "id",
       cfg.defaultDocumentType,
     );
@@ -77,14 +82,38 @@
     applyVisibility();
   };
 
+  // The notes box holds bank details (invoice) or terms (quotation); keep one value per mode.
+  let currentType = cfg.defaultDocumentType;
+  const notes = {};
   const applyMode = () => {
-    state.documentType = modeSelect.value;
+    notes[currentType] = transferInput.value;
+    currentType = modeSelect.value;
+    transferInput.value = notes[currentType] ?? "";
+    state.documentType = currentType;
     updateLabels();
     state.sections = resolveSections(state.layout || cfg.layouts[0], getActiveMode());
     applyVisibility();
   };
 
-  const applyLogo = () => (byId("logoPreview").src = logoSelect.value);
+  // ---- logo ----
+  const applyLogo = () => (logoPreview.src = logoSelect.value);
+
+  // Clicking the logo opens the OS file dialog so a logo can be picked from any folder.
+  const pickLogo = () => logoFile.click();
+  const loadLogo = () => {
+    const file = logoFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      [...logoSelect.options].filter((o) => o.dataset.custom).forEach((o) => o.remove());
+      const opt = new Option(file.name, reader.result, true, true);
+      opt.dataset.custom = "1";
+      logoSelect.add(opt);
+      applyLogo();
+    };
+    reader.readAsDataURL(file);
+    logoFile.value = "";
+  };
 
   const randomize = () => {
     [logoSelect, layoutSelect].forEach((s) => (s.selectedIndex = Math.floor(Math.random() * s.options.length)));
@@ -96,14 +125,27 @@
   const rowHtml = (n) => `<tr>
     <td class="text-center index-cell">${n}</td>
     <td><input type="text" placeholder="${P.item}"></td>
-    <td><input type="number" class="amount-input" placeholder="0"></td>
+    <td><input type="text" inputmode="numeric" autocomplete="off" class="amount-input" placeholder="0"></td>
     <td class="no-print text-center"><button class="btn-delete" type="button">✕</button></td>
   </tr>`;
 
   const calculateTotal = () => {
-    const total = $$(".amount-input").reduce((sum, i) => sum + (parseFloat(i.value) || 0), 0);
+    const total = $$(".amount-input").reduce((sum, i) => sum + num(i.value), 0);
     byId("totalDisplay").textContent = money(total);
     if (lock.checked) terbilangField.value = `${terbilang(total)} ${cfg.currencyWord}`;
+  };
+
+  // Live thousand separators (same locale as #totalDisplay), keeping the caret next to the same digit.
+  const formatAmountInput = (input) => {
+    const digitsBefore = input.value.slice(0, input.selectionStart).replace(/\D/g, "").length;
+    input.value = fmt(num(input.value));
+    let pos = 0;
+    let seen = 0;
+    while (pos < input.value.length && seen < digitsBefore) {
+      if (/\d/.test(input.value[pos])) seen++;
+      pos++;
+    }
+    input.setSelectionRange(pos, pos);
   };
 
   const addRow = () => {
@@ -125,12 +167,24 @@
   applyMode();
 
   logoSelect.addEventListener("change", applyLogo);
+  logoPreview.addEventListener("click", pickLogo);
+  logoPreview.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      pickLogo();
+    }
+  });
+  logoFile.addEventListener("change", loadLogo);
   layoutSelect.addEventListener("change", applyLayout);
   modeSelect.addEventListener("change", applyMode);
   byId("randomizeBtn").addEventListener("click", randomize);
   byId("addRowButton").addEventListener("click", addRow);
   lock.addEventListener("change", () => (terbilangField.readOnly = lock.checked));
   tableBody.addEventListener("click", (e) => e.target.closest(".btn-delete") && deleteRow(e.target));
-  tableBody.addEventListener("input", (e) => e.target.matches(".amount-input") && calculateTotal());
+  tableBody.addEventListener("input", (e) => {
+    if (!e.target.matches(".amount-input")) return;
+    formatAmountInput(e.target);
+    calculateTotal();
+  });
   $$("[data-export]").forEach((btn) => btn.addEventListener("click", exporters[btn.dataset.export]));
 })();
