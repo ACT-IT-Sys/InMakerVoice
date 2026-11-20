@@ -1,70 +1,119 @@
-// Core settings. Lengthy/structured lists live in their own files (layouts.config.js).
+// Core settings. Structured lists live in their own files:
+//   fields.config.js (meta/signature fields) · modes.config.js (invoice/quotation) · layouts.config.js
 window.InvoiceConfig = {
   locale: "id-ID",
   currency: "Rp",
   currencyWord: "Rupiah",
   filePrefix: "Invoice",
+  // Flexible filename template. Placeholders: {mode} {serial} {weightVolume} {incoterms} {company} {date}
+  fileNameTemplate: "{mode} - {serial} - ({weightVolume} - {incoterms})",
+  // When tax is blank and qty === 1, export shows only amount (config-tunable)
+  exportSimpleWhenNoTax: true,
   signatureCity: "Lembar",
-  defaultCompany: "CV. ",
+  defaultCompany: "PT. ACT GLOBAL FREIGHT SERVICES",
   pdf: { margin: 0.5, format: "letter", scale: 2 },
+
+  // Scalar options below can be overridden per layout (see layouts.config.js).
+  //   taxMode     : "inclusive" = amount = qty × rate × (1 + tax); "exclusive" = amount = qty × rate,
+  //                 tax is summarised per rate in the totals block.
+  //   affixInputs : rate/amount inputs show the currency prefix, tax shows the suffix.
+  //   dateFormat  : "long" (20 November 2026) | "short" (20/11/2026)
+  taxMode: "inclusive",
+  affixInputs: false,
+  taxSuffix: "%",
+  dateFormat: "long",
+
+  // Textareas that grow with their content.
+  autosizeFields: ["terbilangField", "transferDetails"],
 
   // Toolbar buttons. Missing key = visible; false = hidden.
   exports: { print: true, pdf: true, doc: true, xlsx: false },
 
   // Content visibility (global). Missing key = visible; false = hidden.
-  // Hideable keys are the [data-section] values in index.html (meta field keys included).
+  // Hideable keys are the [data-section] values in index.html, meta field keys and signature fields.
   // "items" and "total" are protected (not hideable); unknown keys are ignored with a console warning.
-  // Mode-specific fields (jatuhTempo, berlakuHingga) are switched per mode in `modes` below.
+  // Precedence: global < layout < mode < layout's entry for that mode.
   sections: {
     logo: true,
     companyName: true,
+    companyAddress: false,
+    companyContact: false,
     title: true,
     perihal: true,
     tanggal: true,
     kepada: true,
+    attn: false,
+    email: false,
     jatuhTempo: true,
     berlakuHingga: true,
+    rateRef: false,
+    salesExec: false,
+    serviceType: false,
+    portLoading: false,
+    portDischarge: false,
+    commodity: false,
     terbilang: true,
     transfer: true,
     signatureDate: true,
+    signatureParty: false,
     signatureName: true,
+    signatureRole: false,
   },
 
-  // Base labels. Meta row labels use the `meta_<key>` convention so modes can rename them.
+  // Base labels. Meta row labels use `meta_<key>`, group headings use `group_<group>`.
   labels: {
     title: "INVOICE",
     no: "NO",
     description: "KETERANGAN",
     amount: "JUMLAH (Rp)",
+    qty: "QTY",
+    unit: "UNIT",
+    rate: "RATE",
+    tax: "TAX",
     total: "TOTAL:",
+    subtotal: "Subtotal:",
+    taxLine: "PPN {pct}%:",
     terbilang: "Terbilang :",
     lock: "Kunci Edit",
     transfer: "Please Transfer details :",
     addRow: "+ Add Row",
     logoPick: "Klik untuk memilih logo dari komputer",
+    group_shipment: "",
     meta_perihal: "Perihal",
     meta_tanggal: "Tanggal",
     meta_kepada: "Kepada Yth",
+    meta_attn: "Attn",
+    meta_email: "Email",
     meta_jatuhTempo: "Jatuh Tempo",
     meta_berlakuHingga: "Berlaku Hingga",
+    meta_rateRef: "Rate Ref.",
+    meta_salesExec: "Sales Executive",
+    meta_serial: "No.",
+    meta_serviceType: "Service Type",
+    meta_incoterms: "Incoterms",
+    meta_portLoading: "Port of Loading",
+    meta_portDischarge: "Port of Discharge",
+    meta_commodity: "Commodity",
+    meta_weightVolume: "Weight / Volume",
   },
 
+  // Placeholder text. {city} and {date} are filled in where used.
   placeholders: {
     company: "CV. atau PT. Nama",
+    companyAddress: "Alamat perusahaan",
+    companyContact: "Phone: ... | Email: ...",
     item: "Isi keterangan item...",
+    category: "FREIGHT CHARGES",
+    qty: "1",
+    unit: "Cntr.",
+    rate: "0",
+    tax: "%",
     transfer: "Masukkan detail instruksi transfer bank di sini...",
+    signatureLead: "{city}, {date}",
+    signatureParty: "Nama Perusahaan",
     signatureName: "( Nama Jelas & Tanda Tangan )",
+    signatureRole: "Jabatan",
   },
-
-  // Meta rows (all modes). Omitted placeholder = today's date.
-  // Which rows actually show is decided by `sections` (global < layout < mode).
-  metaFields: [
-    { key: "perihal", placeholder: "Contoh: Tagihan Ocean" },
-    { key: "tanggal" },
-    { key: "kepada", placeholder: "Contoh: INDOREX di Tempat" },
-    { key: "jatuhTempo", placeholder: "Contoh: 14 hari setelah invoice" },
-    { key: "berlakuHingga", placeholder: "Contoh: 30 hari sejak tanggal penawaran" },
-  ],
 
   monthNames: [
     "Januari",
@@ -88,38 +137,5 @@ window.InvoiceConfig = {
     { file: "img/L4.webp", name: "Logo 4" },
   ],
   defaultLogoFile: "img/L1.webp",
-
-  // Document modes. Each mode can override labels, placeholders, sections (visibility), and filePrefix.
-  // Precedence for sections: global < layout < mode < runtime toggles.
-  //   Invoice   = a bill: due date + bank transfer instructions.
-  //   Quotation = an offer: validity period + terms & conditions (no due date, no bank details).
-  defaultDocumentType: "invoice",
-  modes: {
-    invoice: {
-      filePrefix: "Invoice",
-      labels: {
-        title: "INVOICE",
-        amount: "JUMLAH (Rp)",
-        transfer: "Please Transfer details :",
-        meta_perihal: "Perihal",
-      },
-      placeholders: {
-        transfer: "Masukkan detail instruksi transfer bank di sini...",
-      },
-      sections: { jatuhTempo: true, berlakuHingga: false, transfer: true },
-    },
-    quotation: {
-      filePrefix: "Quotation",
-      labels: {
-        title: "QUOTATION",
-        amount: "HARGA (Rp)",
-        transfer: "Syarat & Ketentuan :",
-        meta_perihal: "Perihal Penawaran",
-      },
-      placeholders: {
-        transfer: "Contoh: Harga belum termasuk PPN. Pembayaran DP 50% di muka...",
-      },
-      sections: { jatuhTempo: false, berlakuHingga: true, transfer: true },
-    },
-  },
+  defaultDocumentType: "quotation",
 };

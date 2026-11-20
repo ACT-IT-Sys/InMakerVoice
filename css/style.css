@@ -6,7 +6,7 @@
   --tint: #f1f5f9;
   --bg-color: #f8fafc;
   --text-color: #334155;
-  --font-family: "Roboto", Arial, sans-serif;
+  --font-family: Roboto, Arial, sans-serif;
   --pad: 40px;
   --gap: 20px;
   --fs: 15px;
@@ -530,11 +530,17 @@ textarea {
 [data-layout="compact-clean"] [data-section="perihal"] {
   grid-area: perihal;
 }
-[data-layout="compact-clean"] :is([data-section="jatuhTempo"], [data-section="berlakuHingga"]) {
+[data-layout="compact-clean"]
+  :is([data-section="jatuhTempo"], [data-section="berlakuHingga"]) {
   grid-area: extra;
 }
 [data-layout="compact-clean"]
-  :is([data-section="tanggal"], [data-section="perihal"], [data-section="jatuhTempo"], [data-section="berlakuHingga"]) {
+  :is(
+    [data-section="tanggal"],
+    [data-section="perihal"],
+    [data-section="jatuhTempo"],
+    [data-section="berlakuHingga"]
+  ) {
   justify-self: end;
   text-align: right;
 }
@@ -595,7 +601,47 @@ textarea {
   text-align: left;
 }
 
-/* ===== Export / print ===== */
+/* ===== Modern+ layout ===== */
+[data-layout="modern-plus"] {
+  --primary-color: #1e3a8a;
+  --accent-color: #f97316;
+  --tint: #f8fafc;
+  grid-template-columns: 1fr;
+  grid-template-areas: "brand" "title" "meta" "items" "total" "terbilang" "transfer" "signature";
+  font-family: system-ui, sans-serif;
+}
+[data-layout="modern-plus"] .invoice-title {
+  font-size: 1.8em;
+  letter-spacing: 1px;
+  border-bottom: 3px solid var(--accent-color);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+[data-layout="modern-plus"] .rate-col,
+[data-layout="modern-plus"] .tax-col {
+}
+[data-layout="modern-plus"].rate-tax-on .amount-input {
+  background: #f1f5f9;
+}
+[data-layout="modern-plus"] .category-row td {
+  font-weight: 700;
+  color: var(--primary-color);
+  padding: 8px 0 4px;
+  border-bottom: 1px solid var(--border-color);
+}
+[data-layout="modern-plus"] .sig-block {
+  display: inline-block;
+  width: 45%;
+  margin-right: 5%;
+  vertical-align: top;
+  text-align: center;
+}
+[data-layout="modern-plus"] #signatureBlocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
 body.exporting .invoice-logo {
   outline: none;
 }

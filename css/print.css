@@ -1,0 +1,52 @@
+body.exporting .invoice-logo {
+  outline: none;
+}
+
+body.exporting .no-print {
+  display: none !important;
+}
+
+body.exporting .invoice-container {
+  --frame: none;
+  box-shadow: none;
+}
+
+body.exporting .editable {
+  border-color: transparent;
+  background: transparent;
+}
+
+body.exporting ::placeholder {
+  color: transparent;
+}
+
+@media print {
+  @page {
+    margin: 0;
+  }
+  .no-print,
+  .sticky-header {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+  .invoice-container {
+    --frame: none;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+    box-decoration-break: clone;
+  }
+  [data-zone] {
+    break-inside: avoid;
+  }
+  .editable {
+    border-color: transparent;
+    background: transparent;
+  }
+  ::placeholder {
+    color: transparent;
+  }
+}

@@ -4,7 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Invoice Maker</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/skins.css" />
+    <link rel="stylesheet" href="css/layouts/fit-two-bar.css" />
+    <link rel="stylesheet" href="css/layouts/modern-corporate.css" />
+    <link rel="stylesheet" href="css/layouts/bold-border.css" />
+    <link rel="stylesheet" href="css/layouts/compact-clean.css" />
+    <link rel="stylesheet" href="css/layouts/elegant-serif.css" />
+    <link rel="stylesheet" href="css/layouts/modern-plus.css" />
+    <link rel="stylesheet" href="css/print.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
@@ -42,7 +50,11 @@
     <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
       <div data-zone="brand">
         <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" role="button" tabindex="0" />
-        <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
+        <div class="brand-text">
+          <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
+          <input type="text" id="companyAddress" data-section="companyAddress" class="editable company-line" />
+          <input type="text" id="companyContact" data-section="companyContact" class="editable company-line" />
+        </div>
       </div>
 
       <div data-zone="title">
@@ -57,8 +69,16 @@
             <tr>
               <th data-label="no"></th>
               <th data-label="description"></th>
+              <th data-label="qty"></th>
+              <th data-label="unit"></th>
+              <th data-label="rate" class="rate-col"></th>
+              <th data-label="tax" class="tax-col"></th>
               <th data-label="amount"></th>
-              <th class="no-print"></th>
+              <th class="no-print">
+                <label title="Show Rate & Tax (amount auto-calculated inclusive)">
+                  <input type="checkbox" id="rateTaxToggle" checked /> Rate+Tax
+                </label>
+              </th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -67,6 +87,7 @@
       </div>
 
       <div data-zone="total">
+        <div id="totalBreakdown"></div>
         <span data-label="total"></span>
         <span id="totalDisplay"></span>
       </div>
@@ -88,18 +109,25 @@
       </div>
 
       <div data-zone="signature">
-        <input type="text" id="signatureLocationDate" data-section="signatureDate" class="editable" />
-        <input type="text" id="signatureName" data-section="signatureName" class="editable" />
+        <div id="signatureBlocks"></div>
+        <button type="button" class="btn no-print" id="addSignature">+ Signature</button>
       </div>
     </div>
 
     <input type="file" id="logoFile" accept="image/*" hidden />
 
     <script src="js/config.js"></script>
+    <script src="js/fields.config.js"></script>
+    <script src="js/modes.config.js"></script>
     <script src="js/layouts.config.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/terbilang.js"></script>
+    <script src="js/totals.js"></script>
     <script src="js/exporters.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/signatures.js"></script>
+    <script src="js/logo.js"></script>
+    <script src="js/view.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

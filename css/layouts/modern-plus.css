@@ -1,0 +1,382 @@
+/* ===== Modern+ : sales quotation sheet =====
+   Meta rows arrive pre-grouped ([data-group]); the meta zone is dissolved (display: contents)
+   so each group becomes its own grid item. Sizes/colors are tokens at the top of the block. */
+[data-layout="modern-plus"] {
+  --primary-color: #1b2a5c;
+  --accent-color: #f26b1d;
+  --text-color: #1f2937;
+  --muted: #6b7280;
+  --soft: #f5f7fb;
+  --line: #e5e7eb;
+  --font-family: "Segoe UI", "Noto Sans", "Open Sans", system-ui, sans-serif;
+  --pad: 36px;
+  --gap: 12px;
+  --fs: 14px;
+  --label-w: 150px;
+  --box-pad: 12px;
+  --radius: 16px;
+  color: var(--text-color);
+  grid-template-columns: minmax(0, 1fr) auto;
+  /* header: brand left, title + serial right (rows 1-2 share the brand area) */
+  grid-template-areas:
+    "brand title"
+    "brand serial"
+    "rule rule"
+    "customer info"
+    "shipment shipment"
+    "items items"
+    "total total"
+    "terbilang terbilang"
+    "transfer transfer"
+    "signature signature";
+}
+
+[data-layout="modern-plus"] [data-zone="brand"] {
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+[data-layout="modern-plus"] .editable {
+  padding-left: 0;
+  padding-right: 0;
+}
+[data-layout="modern-plus"] .company-name-input {
+  font-size: 1.35em;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+[data-layout="modern-plus"] [data-zone="title"] {
+  margin-bottom: 0;
+  padding-left: 40px;
+}
+[data-layout="modern-plus"] .invoice-title {
+  font-size: 2.5em;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--primary-color);
+}
+[data-layout="modern-plus"] .invoice-title::after {
+  content: "";
+  display: block;
+  width: 78px;
+  height: 4px;
+  margin: 10px 0 0 auto;
+  border-radius: 2px;
+  background: var(--accent-color);
+}
+[data-layout="modern-plus"] [data-group="serial"] {
+  grid-area: serial;
+  align-self: start;
+  text-align: right;
+}
+[data-layout="modern-plus"] [data-group="serial"] .meta-label,
+[data-layout="modern-plus"] [data-group="serial"] .meta-value::before {
+  display: none;
+}
+[data-layout="modern-plus"] [data-group="serial"] .meta-row {
+  display: block;
+}
+[data-layout="modern-plus"] [data-group="serial"] .editable {
+  text-align: right;
+  font-weight: 600;
+  font-size: 1.05em;
+  color: #0f172a;
+}
+[data-layout="modern-plus"]::after {
+  content: "";
+  grid-area: rule;
+  height: 1px;
+  margin-bottom: var(--gap);
+  background: var(--line);
+}
+
+/* --- customer + quotation info share one tinted, rounded box --- */
+[data-layout="modern-plus"] [data-zone="meta"] {
+  display: contents;
+}
+[data-layout="modern-plus"] .meta-group {
+  display: block; /* a real box, so grid-area applies (base keeps groups transparent) */
+}
+[data-layout="modern-plus"]::before {
+  content: "";
+  grid-row: customer;
+  grid-column: 1 / -1;
+  border-radius: var(--radius);
+  background: var(--soft);
+}
+[data-layout="modern-plus"] [data-group="customer"] {
+  grid-area: customer;
+  padding: var(--box-pad);
+}
+[data-layout="modern-plus"] [data-group="info"] {
+  grid-area: info;
+  display: grid;
+  align-content: center;
+  gap: 0px;
+  padding: var(--box-pad) var(--box-pad) var(--box-pad) 0;
+}
+[data-layout="modern-plus"] [data-group="info"] .meta-label {
+  color: var(--muted);
+  font-weight: 600;
+}
+[data-layout="modern-plus"]
+  :is([data-group="customer"], [data-group="shipment"])
+  .meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+[data-layout="modern-plus"]
+  :is([data-group="customer"], [data-group="shipment"])
+  .meta-value {
+  flex: 1;
+  min-width: 0;
+}
+[data-layout="modern-plus"]
+  :is([data-group="customer"], [data-group="shipment"])
+  .meta-value::before {
+  content: none;
+}
+[data-layout="modern-plus"]
+  :is([data-group="customer"], [data-group="shipment"])
+  .meta-value
+  .editable {
+  max-width: none;
+}
+[data-layout="modern-plus"]
+  :is([data-group="customer"], [data-group="shipment"])
+  .meta-label::after {
+  content: ":";
+}
+[data-layout="modern-plus"] [data-group="customer"] .meta-label {
+  font-weight: 400;
+}
+[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] {
+  display: block;
+  margin-bottom: 6px;
+}
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label {
+  display: block;
+  font-size: 0.82em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label::after {
+  content: none;
+}
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .editable {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* --- shipment details: two-column key/value grid between two rules --- */
+[data-layout="modern-plus"] [data-group="shipment"] {
+  grid-area: shipment;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0px 40px;
+  margin: var(--gap) 0;
+  padding: 12px 4px 16px;
+  border-top: 2px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+[data-layout="modern-plus"] [data-group="shipment"] .group-title {
+  display: block;
+  grid-column: 1 / -1;
+  font-size: 0.82em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-layout="modern-plus"] [data-group="shipment"] .meta-label {
+  font-weight: 400;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* --- items table --- */
+[data-layout="modern-plus"] [data-zone="items"] {
+  margin-bottom: 0;
+}
+[data-layout="modern-plus"] .invoice-table th {
+  padding: 14px 10px;
+  border-bottom: 2px solid var(--primary-color);
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-align: left;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(1) {
+  width: 6%;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(2) {
+  width: auto;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(3) {
+  width: 7%;
+  text-align: center;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(4) {
+  width: 9%;
+  text-align: center;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(5) {
+  width: 17%;
+  text-align: right;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(6) {
+  width: 8%;
+  text-align: center;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(7) {
+  width: 18%;
+  text-align: right;
+}
+[data-layout="modern-plus"] .invoice-table th:nth-child(8) {
+  width: 3%;
+}
+[data-layout="modern-plus"] .invoice-table td {
+  border-bottom: 1px solid var(--line);
+}
+[data-layout="modern-plus"] .invoice-table td input {
+  padding: 14px 10px;
+}
+[data-layout="modern-plus"] :is(.qty-input, .unit-input, .tax-input) {
+  text-align: center;
+}
+[data-layout="modern-plus"] .rate-input {
+  text-align: right;
+}
+[data-layout="modern-plus"] .category-row td {
+  border-bottom: 0;
+  padding-top: 14px;
+}
+[data-layout="modern-plus"] .category-input {
+  font-size: 0.88em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+/* --- totals: subtotal / tax lines / grand total, right-aligned block --- */
+[data-layout="modern-plus"] [data-zone="total"] {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 0;
+  row-gap: 0;
+  justify-self: end;
+  width: 36%;
+  min-width: 300px;
+  margin: 14px 0 30px;
+  padding: 0;
+  border: 0;
+  text-align: right;
+}
+[data-layout="modern-plus"] .tb-label,
+[data-layout="modern-plus"] .tb-value {
+  padding: 12px 0;
+}
+[data-layout="modern-plus"] .tb-label,
+[data-layout="modern-plus"] [data-zone="total"] > [data-label="total"] {
+  padding-right: 28px;
+}
+[data-layout="modern-plus"] :is(.tb-label, .tb-value).tb-sub {
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+}
+[data-layout="modern-plus"] :is(.tb-label, .tb-value).tb-tax {
+  font-size: 0.92em;
+  font-weight: 400;
+  color: var(--muted);
+}
+[data-layout="modern-plus"] [data-zone="total"] > [data-label="total"],
+[data-layout="modern-plus"] #totalDisplay {
+  padding: 14px 0;
+  border-top: 2px solid var(--primary-color);
+  border-bottom: 1px solid var(--line);
+  font-size: 1.25em;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+/* --- terms --- */
+[data-layout="modern-plus"] [data-zone="transfer"] strong {
+  font-size: 0.82em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+[data-layout="modern-plus"] #transferDetails {
+  margin-top: 6px;
+  font-size: 0.92em;
+  line-height: 1.9;
+}
+
+/* --- signatures: two centered columns --- */
+[data-layout="modern-plus"] [data-zone="signature"] {
+  justify-self: stretch;
+  min-width: 0;
+  padding: 60px 0 0;
+}
+[data-layout="modern-plus"] #signatureBlocks {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+[data-layout="modern-plus"] .sig-block {
+  flex: 0 1 38%;
+  text-align: center;
+}
+[data-layout="modern-plus"] .sig-block .editable {
+  text-align: center;
+}
+[data-layout="modern-plus"] .sig-party {
+  font-weight: 700;
+}
+[data-layout="modern-plus"] .sig-name {
+  margin-top: 64px;
+  font-weight: 400;
+}
+[data-layout="modern-plus"] .sig-name:not(:placeholder-shown) {
+  text-decoration: underline;
+}
+[data-layout="modern-plus"] .sig-name:placeholder-shown {
+  width: min(190px, 60%);
+  margin-inline: auto;
+  border-bottom: 1px solid var(--text-color);
+}
+
+/* --- placeholders that are real content in the output ("-" cells, blank signature line) --- */
+body.exporting
+  [data-layout="modern-plus"]
+  :is(.qty-input, .unit-input, .rate-input, .tax-input)::placeholder {
+  color: var(--muted);
+}
+body.exporting [data-layout="modern-plus"] .sig-name:placeholder-shown {
+  border-bottom-color: var(--text-color);
+}
+@media print {
+  [data-layout="modern-plus"]
+    :is(.qty-input, .unit-input, .rate-input, .tax-input)::placeholder {
+    color: var(--muted);
+  }
+  [data-layout="modern-plus"] .sig-name:placeholder-shown {
+    border-bottom-color: var(--text-color);
+  }
+}

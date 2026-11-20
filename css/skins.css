@@ -1,0 +1,55 @@
+/* ===== Table skins ===== */
+[data-skin="classic"] {
+  --th-bg: var(--primary-color);
+  --th-fg: #fff;
+  --cell-v: 1px solid var(--border-color);
+  --cell-h: 1px solid var(--border-color);
+  --zebra: transparent;
+}
+
+[data-skin="band"] {
+  --th-bg: var(--primary-color);
+  --th-fg: #fff;
+  --cell-v: 0;
+  --cell-h: 1px solid var(--border-color);
+  --zebra: transparent;
+}
+
+[data-skin="boxed"] {
+  --th-bg: #fff;
+  --th-fg: var(--primary-color);
+  --cell-v: 2px solid var(--primary-color);
+  --cell-h: 2px solid var(--primary-color);
+  --zebra: transparent;
+}
+
+[data-skin="minimal"] {
+  --th-bg: var(--tint);
+  --th-fg: var(--primary-color);
+  --cell-v: 0;
+  --cell-h: 0;
+  --zebra: var(--tint);
+}
+
+[data-skin="editorial"] {
+  --th-bg: #fff;
+  --th-fg: var(--primary-color);
+  --cell-v: 0;
+  --cell-h: 1px solid var(--border-color);
+  --zebra: transparent;
+}
+
+[data-skin="editorial"] th {
+  font-variant: small-caps;
+  text-transform: none;
+  letter-spacing: 0.08em;
+  border-bottom: 2px solid var(--primary-color);
+}
+
+[data-skin="ledger"] {
+  --th-bg: #fff;
+  --th-fg: var(--muted);
+  --cell-v: 0;
+  --cell-h: 0;
+  --zebra: transparent;
+}
