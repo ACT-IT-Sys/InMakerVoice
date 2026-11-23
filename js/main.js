@@ -14,6 +14,7 @@
   signatures.bind();
   logo.bind();
   view.bind();
+  Invoice.fieldsPanel.bind();
 
   byId("randomizeBtn").addEventListener("click", () => {
     [logoSelect, layoutSelect].forEach((s) => (s.selectedIndex = Math.floor(Math.random() * s.options.length)));

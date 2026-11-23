@@ -403,7 +403,23 @@ textarea {
   font-size: 1.5em;
 }
 
-/* ===== Structural helpers: meta groups, brand text, totals breakdown ===== */
+.fields-panel {
+  position: absolute;
+  top: 48px;
+  right: 20px;
+  z-index: 1001;
+  width: 280px;
+  max-height: 70vh;
+  overflow: auto;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+.fields-header { font-weight: 600; margin-bottom: 8px; }
+.field-item { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 13px; }
+#fieldsBtn { position: relative; }
 .meta-group {
   display: contents; /* rows stay direct grid items of the meta zone unless a layout opts in */
 }

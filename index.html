@@ -38,7 +38,13 @@
           <label for="layoutSelect">Layout:</label>
           <select id="layoutSelect" class="header-select"></select>
         </div>
-        <button class="btn btn-primary" id="randomizeBtn" type="button">🔀 Randomize</button>
+        <button class="btn" id="fieldsBtn" type="button">Fields</button>
+        <div id="fieldsPanel" class="fields-panel no-print" hidden>
+          <div class="fields-header">Field visibility</div>
+          <div id="fieldsList"></div>
+          <label class="field-item"><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax columns</label>
+          <button type="button" id="fieldsReset" class="btn">Reset to layout defaults</button>
+        </div>
       </div>
     </div>
 
@@ -74,11 +80,7 @@
               <th data-label="rate" class="rate-col"></th>
               <th data-label="tax" class="tax-col"></th>
               <th data-label="amount"></th>
-              <th class="no-print">
-                <label title="Show Rate & Tax (amount auto-calculated inclusive)">
-                  <input type="checkbox" id="rateTaxToggle" checked /> Rate+Tax
-                </label>
-              </th>
+              <th class="no-print"></th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -119,7 +121,8 @@
     <script src="js/config.js"></script>
     <script src="js/fields.config.js"></script>
     <script src="js/modes.config.js"></script>
-    <script src="js/layouts.config.js"></script>
+    <script src="js/layouts/modern-plus.config.js"></script>
+    <script src="js/layouts/index.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/terbilang.js"></script>
     <script src="js/totals.js"></script>
@@ -128,6 +131,7 @@
     <script src="js/signatures.js"></script>
     <script src="js/logo.js"></script>
     <script src="js/view.js"></script>
+    <script src="js/fields-panel.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

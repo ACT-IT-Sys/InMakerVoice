@@ -38,7 +38,18 @@
           .join("")}</div>`,
       )
       .join("");
-    byId("companyNameInput").value = cfg.defaultCompany;
+  const applyDefaults = () => {
+    const defs = Invoice.layered("default", {});
+    const map = {
+      companyNameInput: defs.company,
+      companyAddress: defs.companyAddress,
+      companyContact: defs.companyContact,
+    };
+    Object.entries(map).forEach(([id, val]) => {
+      const el = byId(id);
+      if (el && val && !el.value.trim()) el.value = val;
+    });
+  };
     Invoice.logo.fill();
     fillSelect(layoutSelect, cfg.layouts, "id", cfg.defaultLayoutId);
     fillSelect(
@@ -72,11 +83,25 @@
     Invoice.fitFields();
   };
 
+  const applyDefaults = () => {
+    const defs = Invoice.layered("default", {});
+    const map = {
+      companyNameInput: defs.company,
+      companyAddress: defs.companyAddress,
+      companyContact: defs.companyContact,
+    };
+    Object.entries(map).forEach(([id, val]) => {
+      const el = byId(id);
+      if (el && val && !el.value.trim()) el.value = val;
+    });
+  };
+
   // Everything that depends on the active layout or mode.
   const refresh = () => {
     state.sections = resolveSections();
     updateLabels();
     Invoice.signatures.seed();
+    applyDefaults();
     applyVisibility();
     Invoice.table.reformat();
     Invoice.table.applyRateTaxToggle();
