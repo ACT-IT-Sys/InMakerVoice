@@ -6,10 +6,7 @@
   const btn = byId("fieldsBtn");
 
   const sections = () => [
-    ...cfg.metaFields.map((f) => ({
-      key: f.key,
-      label: Invoice.labels()["meta_" + f.key] || f.key,
-    })),
+    ...cfg.metaFields.map((f) => ({ key: f.key, label: Invoice.labels()["meta_" + f.key] || f.key })),
     { key: "companyAddress", label: "Company address" },
     { key: "companyContact", label: "Company contact" },
     { key: "terbilang", label: "Terbilang" },
@@ -19,20 +16,17 @@
 
   const render = () => {
     list.innerHTML = sections()
-      .map(
-        (s) =>
-          `<label class="field-item"><input type="checkbox" data-field="${s.key}" ${state.sections[s.key] !== false ? "checked" : ""}> ${s.label}</label>`,
-      )
+      .map((s) => `<label class="field-item"><input type="checkbox" data-section="${s.key}" ${state.sections[s.key] !== false ? "checked" : ""}> ${s.label}</label>`)
       .join("");
   };
 
   const bind = () => {
     btn.addEventListener("click", () => {
-      panel.hidden = !panel.hidden;
-      if (!panel.hidden) render();
+      panel.classList.toggle("open");
+      if (panel.classList.contains("open")) render();
     });
     list.addEventListener("change", (e) => {
-      const key = e.target.dataset.field;
+      const key = e.target.dataset.section;
       if (key) state.sections[key] = e.target.checked;
       Invoice.view.applyVisibility();
     });
@@ -41,7 +35,7 @@
       render();
     });
     document.addEventListener("click", (e) => {
-      if (!panel.contains(e.target) && e.target !== btn) panel.hidden = true;
+      if (!panel.contains(e.target) && e.target !== btn) panel.classList.remove("open");
     });
   };
 

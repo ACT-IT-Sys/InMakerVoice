@@ -21,6 +21,9 @@ body.exporting ::placeholder {
 }
 
 @media print {
+  .invoice-container {
+    zoom: var(--print-scale, 1);
+  }
   @page {
     margin: 0;
   }

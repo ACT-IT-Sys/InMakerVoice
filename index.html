@@ -13,25 +13,18 @@
     <link rel="stylesheet" href="css/layouts/elegant-serif.css" />
     <link rel="stylesheet" href="css/layouts/modern-plus.css" />
     <link rel="stylesheet" href="css/print.css" />
+    <script src="https://cdn.jsdelivr.net/npm/snapdom@1.9.8/dist/snapdom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@9.1.0/build/index.umd.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
   <body>
     <div class="sticky-header">
       <!-- Visibility of these buttons is controlled by `exports` in config.js -->
       <div class="header-group-left">
-        <button class="btn" type="button" data-export="print">
-          🖨️ Cetak / Print
-        </button>
-        <button class="btn" type="button" data-export="xlsx">
-          📊 Save as .xlsx
-        </button>
-        <button class="btn" type="button" data-export="doc">
-          📄 Save as .doc
-        </button>
-        <button class="btn" type="button" data-export="pdf">
-          📥 Save as .pdf
-        </button>
+        <button class="btn" type="button" data-export="print">🖨️ Cetak / Print</button>
+        <button class="btn" type="button" data-export="xlsx">📊 Save as .xlsx</button>
+        <button class="btn" type="button" data-export="doc">📄 Save as .doc</button>
+        <button class="btn" type="button" data-export="pdf">📥 Save as .pdf</button>
       </div>
       <div class="header-group-right">
         <div class="control-item">
@@ -47,16 +40,11 @@
           <select id="layoutSelect" class="header-select"></select>
         </div>
         <button class="btn" id="fieldsBtn" type="button">Fields</button>
-        <div id="fieldsPanel" class="fields-panel" hidden>
+        <div id="fieldsPanel" class="fields-panel">
           <div class="fields-header">Field visibility</div>
           <div id="fieldsList"></div>
-          <label class="field-item"
-            ><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax
-            columns</label
-          >
-          <button type="button" id="fieldsReset" class="btn">
-            Reset to layout defaults
-          </button>
+          <label class="field-item"><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax columns</label>
+          <button type="button" id="fieldsReset" class="btn">Reset to layout defaults</button>
         </div>
       </div>
     </div>
@@ -66,40 +54,13 @@
       Hideable pieces carry [data-section="key"]; keys are controlled from config.js.
       Text, placeholders and meta rows are filled from config by main.js.
     -->
-    <div
-      class="invoice-container"
-      id="invoiceSheet"
-      data-layout="standard"
-      data-skin="classic"
-    >
+    <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
       <div data-zone="brand">
-        <img
-          id="logoPreview"
-          data-section="logo"
-          class="invoice-logo"
-          alt="Logo"
-          role="button"
-          tabindex="0"
-        />
+        <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" role="button" tabindex="0" />
         <div class="brand-text">
-          <input
-            type="text"
-            id="companyNameInput"
-            data-section="companyName"
-            class="editable company-name-input"
-          />
-          <input
-            type="text"
-            id="companyAddress"
-            data-section="companyAddress"
-            class="editable company-line"
-          />
-          <input
-            type="text"
-            id="companyContact"
-            data-section="companyContact"
-            class="editable company-line"
-          />
+          <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
+          <input type="text" id="companyAddress" data-section="companyAddress" class="editable company-line" />
+          <input type="text" id="companyContact" data-section="companyContact" class="editable company-line" />
         </div>
       </div>
 
@@ -125,12 +86,7 @@
           </thead>
           <tbody id="tableBody"></tbody>
         </table>
-        <button
-          class="btn btn-primary no-print add-row"
-          id="addRowButton"
-          type="button"
-          data-label="addRow"
-        ></button>
+        <button class="btn btn-primary no-print add-row" id="addRowButton" type="button" data-label="addRow"></button>
       </div>
 
       <div data-zone="total">
@@ -142,16 +98,8 @@
       <div data-zone="terbilang" data-section="terbilang">
         <strong data-label="terbilang"></strong>
         <div class="terbilang-container">
-          <textarea
-            id="terbilangField"
-            class="editable"
-            rows="1"
-            readonly
-          ></textarea>
-          <label
-            class="terbilang-lock-wrapper no-print"
-            title="Ceklis untuk mengunci input Terbilang"
-          >
+          <textarea id="terbilangField" class="editable" rows="1" readonly></textarea>
+          <label class="terbilang-lock-wrapper no-print" title="Ceklis untuk mengunci input Terbilang">
             <span data-label="lock"></span>
             <input type="checkbox" id="terbilangLock" checked />
           </label>
@@ -165,9 +113,7 @@
 
       <div data-zone="signature">
         <div id="signatureBlocks"></div>
-        <button type="button" class="btn no-print" id="addSignature">
-          + Signature
-        </button>
+        <button type="button" class="btn no-print" id="addSignature">+ Signature</button>
       </div>
     </div>
 

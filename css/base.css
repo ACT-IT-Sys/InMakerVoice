@@ -53,6 +53,7 @@ textarea {
   background: #fff;
   border-bottom: 1px solid var(--border-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-height: 52px;
 }
 
 .header-group-left,
@@ -405,7 +406,7 @@ textarea {
 
 .fields-panel {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 6px);
   right: 0;
   z-index: 1001;
   width: 280px;
@@ -416,6 +417,10 @@ textarea {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  display: none;
+}
+.fields-panel.open {
+  display: block;
 }
 .header-group-right {
   position: relative;

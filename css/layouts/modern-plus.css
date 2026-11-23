@@ -131,33 +131,11 @@
 [data-layout="modern-plus"] [data-group="shipment"] .meta-value::before {
   content: ":";
 }
-[data-layout="modern-plus"] [data-group="customer"] [data-section="attn"],
-[data-layout="modern-plus"] [data-group="customer"] [data-section="email"] {
-  display: grid;
-  grid-template-columns: var(--label-w-small) 1fr;
-  align-items: center;
-}
-[data-layout="modern-plus"]
-  [data-group="customer"]
-  [data-section="attn"]
-  .meta-value::before,
-[data-layout="modern-plus"]
-  [data-group="customer"]
-  [data-section="email"]
-  .meta-value::before {
-  content: ":";
-}
-[data-layout="modern-plus"] [data-group="customer"] .meta-label {
-  font-weight: 400;
-}
 [data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] {
   display: block;
   margin-bottom: 6px;
 }
-[data-layout="modern-plus"]
-  [data-group="customer"]
-  [data-section="kepada"]
-  .meta-label {
+[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .meta-label {
   display: block;
   font-size: 0.82em;
   font-weight: 500;
@@ -165,19 +143,25 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-[data-layout="modern-plus"]
-  [data-group="customer"]
-  [data-section="kepada"]
-  .meta-label::after {
+[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .meta-label::after {
   content: none;
 }
-[data-layout="modern-plus"]
-  [data-group="customer"]
-  [data-section="kepada"]
-  .editable {
+[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .editable {
   font-size: 1.2em;
   font-weight: 700;
   color: #0f172a;
+}
+[data-layout="modern-plus"] [data-group="customer"] [data-section="attn"],
+[data-layout="modern-plus"] [data-group="customer"] [data-section="email"] {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  align-items: center;
+  gap: 4px;
+}
+[data-layout="modern-plus"] [data-group="info"] .meta-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: center;
 }
 
 /* --- shipment details: two-column key/value grid between two rules --- */

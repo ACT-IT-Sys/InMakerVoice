@@ -125,25 +125,42 @@
   };
 
   Invoice.exporters = {
-    print: run(() => window.print()),
-
-    pdf: run(() => {
-      if (!window.html2pdf) return console.warn("Invoice: html2pdf failed to load.");
-      const { margin, format, scale } = cfg.pdf;
-      return window
-        .html2pdf()
-        .set({
-          margin,
-          filename: fileName("pdf"),
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: { scale, useCORS: true },
-          jsPDF: { unit: "in", format, orientation: "portrait" },
-        })
-        .from(sheet)
-        .save();
+    print: run(() => {
+      document.documentElement.style.setProperty("--print-scale", cfg.print?.scale || 1);
+      window.print();
     }),
 
-    doc: run(() => download(new Blob(["\ufeff" + buildDoc(collect())], { type: "application/msword" }), fileName("doc"))),
+    pdf: run(async () => {
+      if (!window.snapdom) return console.warn("Invoice: SnapDOM failed to load.");
+      const { scale = 2 } = cfg.pdf || {};
+      const blob = await snapdom.toBlob(sheet, { scale, backgroundColor: "#fff" });
+      download(blob, fileName("pdf"));
+    }),
+
+    doc: run(async () => {
+      if (!window.docx) return console.warn("Invoice: docx library failed to load.");
+      const d = collect();
+      const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
+      const children = [];
+      if (d.company) children.push(new Paragraph({ children: [new TextRun({ text: d.company, bold: true, size: 28 })] }));
+      if (d.title) children.push(new Paragraph({ children: [new TextRun({ text: d.title, bold: true, size: 36 })], alignment: AlignmentType.RIGHT }));
+      d.meta.forEach(([l, v]) => children.push(new Paragraph(`${l}: ${v}`)));
+      // simplified table
+      const tableRows = [
+        new TableRow({ children: DOC_COLUMNS.map(([k]) => new TableCell({ children: [new Paragraph(labels()[k])] })) }),
+        ...d.rows.map((r) =>
+          isCategory(r)
+            ? new TableRow({ children: [new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: r.category, bold: true })] })], columnSpan: 3 })] })
+            : new TableRow({ children: [new TableCell({ children: [new Paragraph(String(r.no))] }), new TableCell({ children: [new Paragraph(r.desc)] }), new TableCell({ children: [new Paragraph(money(r.amount))] })] }),
+        ),
+      ];
+      children.push(new Table({ rows: tableRows, width: { size: 100, type: WidthType.PERCENTAGE } }));
+      d.totalLines.forEach((l) => children.push(new Paragraph({ children: [new TextRun({ text: `${l.label} ${money(l.value)}`, bold: l.kind === "grand" })], alignment: AlignmentType.RIGHT })));
+      if (d.transfer) children.push(new Paragraph(d.transfer));
+      const doc = new Document({ sections: [{ children }] });
+      const blob = await Packer.toBlob(doc);
+      download(blob, fileName("docx"));
+    }),
 
     xlsx: run(() => {
       const d = collect();

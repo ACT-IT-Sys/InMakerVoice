@@ -13,7 +13,8 @@ window.InvoiceConfig = {
   defaultCompany: "PT. ACT GLOBAL FREIGHT SERVICES",
   defaultCompanyAddress:
     "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
-  pdf: { margin: 0.5, format: "letter", scale: 2 },
+  pdf: { margin: 0.5, format: "a4", scale: 1 },
+  print: { scale: 0.7 },
 
   // Scalar options below can be overridden per layout (see layouts.config.js).
   //   taxMode     : "inclusive" = amount = qty × rate × (1 + tax); "exclusive" = amount = qty × rate,
@@ -29,7 +30,7 @@ window.InvoiceConfig = {
   autosizeFields: ["terbilangField", "transferDetails"],
 
   // Toolbar buttons. Missing key = visible; false = hidden.
-  exports: { print: true, pdf: true, doc: true, xlsx: false },
+  exports: { print: true, pdf: false, doc: false, xlsx: false },
 
   // Content visibility (global). Missing key = visible; false = hidden.
   // Hideable keys are the [data-section] values in index.html, meta field keys and signature fields.
