@@ -12,7 +12,8 @@
   --pad: 36px;
   --gap: 12px;
   --fs: 14px;
-  --label-w: 150px;
+  --label-w: 120px;
+  --label-w-small: 50px;
   --box-pad: 12px;
   --radius: 16px;
   color: var(--text-color);
@@ -122,33 +123,28 @@
   color: var(--muted);
   font-weight: 600;
 }
-[data-layout="modern-plus"]
-  :is([data-group="customer"], [data-group="shipment"])
-  .meta-row {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
+[data-layout="modern-plus"] [data-group="shipment"] .meta-row {
+  display: grid;
+  grid-template-columns: var(--label-w) 1fr;
+  align-items: center;
+}
+[data-layout="modern-plus"] [data-group="shipment"] .meta-value::before {
+  content: ":";
+}
+[data-layout="modern-plus"] [data-group="customer"] [data-section="attn"],
+[data-layout="modern-plus"] [data-group="customer"] [data-section="email"] {
+  display: grid;
+  grid-template-columns: var(--label-w-small) 1fr;
+  align-items: center;
 }
 [data-layout="modern-plus"]
-  :is([data-group="customer"], [data-group="shipment"])
-  .meta-value {
-  flex: 1;
-  min-width: 0;
-}
+  [data-group="customer"]
+  [data-section="attn"]
+  .meta-value::before,
 [data-layout="modern-plus"]
-  :is([data-group="customer"], [data-group="shipment"])
+  [data-group="customer"]
+  [data-section="email"]
   .meta-value::before {
-  content: none;
-}
-[data-layout="modern-plus"]
-  :is([data-group="customer"], [data-group="shipment"])
-  .meta-value
-  .editable {
-  max-width: none;
-}
-[data-layout="modern-plus"]
-  :is([data-group="customer"], [data-group="shipment"])
-  .meta-label::after {
   content: ":";
 }
 [data-layout="modern-plus"] [data-group="customer"] .meta-label {
@@ -313,6 +309,10 @@
   font-size: 1.25em;
   font-weight: 800;
   color: var(--primary-color);
+}
+/* after the shorthand above, so the grand-total label keeps its gap to the amount */
+[data-layout="modern-plus"] [data-zone="total"] > [data-label="total"] {
+  padding-right: 28px;
 }
 
 /* --- terms --- */

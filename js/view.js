@@ -11,14 +11,25 @@
   const applyPlaceholders = () => {
     const P = Invoice.placeholders();
     const vars = { city: cfg.signatureCity, date: today() };
-    const targets = { ...cfg.placeholderTargets, ...Object.fromEntries(cfg.signatureFields.map((f) => [`.sig-${f.key}`, f.placeholder])) };
-    Object.entries(targets).forEach(([selector, key]) => $$(selector).forEach((el) => (el.placeholder = tpl(P[key], vars))));
-    cfg.metaFields.forEach((f) => (byId(f.key).placeholder = f.placeholder ?? today()));
+    const targets = {
+      ...cfg.placeholderTargets,
+      ...Object.fromEntries(
+        cfg.signatureFields.map((f) => [`.sig-${f.key}`, f.placeholder]),
+      ),
+    };
+    Object.entries(targets).forEach(([selector, key]) =>
+      $$(selector).forEach((el) => (el.placeholder = tpl(P[key], vars))),
+    );
+    cfg.metaFields.forEach(
+      (f) => (byId(f.key).placeholder = f.placeholder ?? today()),
+    );
   };
 
   const updateLabels = () => {
     const L = Invoice.labels();
-    $$("[data-label]").forEach((el) => (el.textContent = L[el.dataset.label] ?? ""));
+    $$("[data-label]").forEach(
+      (el) => (el.textContent = L[el.dataset.label] ?? ""),
+    );
     byId("invoiceTitle").textContent = L.title;
     byId("logoPreview").title = L.logoPick;
     applyPlaceholders();
@@ -32,48 +43,54 @@
   const build = () => {
     byId("metaZone").innerHTML = cfg.metaGroups
       .map(
-        (g) => `<div class="meta-group" data-group="${g}"><div class="group-title" data-label="group_${g}"></div>${cfg.metaFields
-          .filter((f) => f.group === g)
-          .map(metaRowHtml)
-          .join("")}</div>`,
+        (g) =>
+          `<div class="meta-group" data-group="${g}"><div class="group-title" data-label="group_${g}"></div>${cfg.metaFields
+            .filter((f) => f.group === g)
+            .map(metaRowHtml)
+            .join("")}</div>`,
       )
       .join("");
-  const applyDefaults = () => {
-    const defs = Invoice.layered("default", {});
-    const map = {
-      companyNameInput: defs.company,
-      companyAddress: defs.companyAddress,
-      companyContact: defs.companyContact,
-    };
-    Object.entries(map).forEach(([id, val]) => {
-      const el = byId(id);
-      if (el && val && !el.value.trim()) el.value = val;
-    });
-  };
+    byId("companyNameInput").value = cfg.defaultCompany;
     Invoice.logo.fill();
     fillSelect(layoutSelect, cfg.layouts, "id", cfg.defaultLayoutId);
     fillSelect(
       modeSelect,
-      Object.keys(cfg.modes).map((id) => ({ id, name: id.charAt(0).toUpperCase() + id.slice(1) })),
+      Object.keys(cfg.modes).map((id) => ({
+        id,
+        name: id.charAt(0).toUpperCase() + id.slice(1),
+      })),
       "id",
       cfg.defaultDocumentType,
     );
-    $$("[data-export]").forEach((btn) => (btn.hidden = cfg.exports[btn.dataset.export] === false));
+    $$("[data-export]").forEach(
+      (btn) => (btn.hidden = cfg.exports[btn.dataset.export] === false),
+    );
     updateLabels();
   };
 
   // ---- visibility: global < layout < mode < layout's entry for that mode ----
   const resolveSections = () => {
-    const keys = [...new Set([...$$("[data-section]").map((el) => el.dataset.section), ...cfg.signatureFields.map((f) => f.section)])];
+    const keys = [
+      ...new Set([
+        ...$$("[data-section]").map((el) => el.dataset.section),
+        ...cfg.signatureFields.map((f) => f.section),
+      ]),
+    ];
     const merged = Invoice.merged("sections", cfg.sections);
     Object.keys(merged)
       .filter((k) => !keys.includes(k))
-      .forEach((k) => console.warn(`Invoice: section "${k}" is protected or unknown; flag ignored.`));
+      .forEach((k) =>
+        console.warn(
+          `Invoice: section "${k}" is protected or unknown; flag ignored.`,
+        ),
+      );
     return Object.fromEntries(keys.map((k) => [k, merged[k] !== false]));
   };
 
   const applyVisibility = () => {
-    $$("[data-section]").forEach((el) => (el.hidden = !state.sections[el.dataset.section]));
+    $$("[data-section]").forEach(
+      (el) => (el.hidden = !state.sections[el.dataset.section]),
+    );
     // A zone or meta group that only wraps sections disappears when all of them are hidden.
     $$("[data-zone], [data-group]").forEach((box) => {
       const kids = $$("[data-section]", box);
@@ -108,8 +125,12 @@
   };
 
   const applyLayout = () => {
-    state.layout = cfg.layouts.find((l) => l.id === layoutSelect.value) || cfg.layouts[0];
-    Object.assign(sheet.dataset, { layout: state.layout.id, skin: state.layout.skin });
+    state.layout =
+      cfg.layouts.find((l) => l.id === layoutSelect.value) || cfg.layouts[0];
+    Object.assign(sheet.dataset, {
+      layout: state.layout.id,
+      skin: state.layout.skin,
+    });
     refresh();
   };
 
@@ -132,5 +153,12 @@
     window.addEventListener("beforeprint", Invoice.fitFields);
   };
 
-  Invoice.view = { build, bind, applyLayout, applyMode, applyPlaceholders, applyVisibility };
+  Invoice.view = {
+    build,
+    bind,
+    applyLayout,
+    applyMode,
+    applyPlaceholders,
+    applyVisibility,
+  };
 })();

@@ -6,7 +6,10 @@
   const btn = byId("fieldsBtn");
 
   const sections = () => [
-    ...cfg.metaFields.map((f) => ({ key: f.key, label: Invoice.labels()["meta_" + f.key] || f.key })),
+    ...cfg.metaFields.map((f) => ({
+      key: f.key,
+      label: Invoice.labels()["meta_" + f.key] || f.key,
+    })),
     { key: "companyAddress", label: "Company address" },
     { key: "companyContact", label: "Company contact" },
     { key: "terbilang", label: "Terbilang" },
@@ -16,7 +19,10 @@
 
   const render = () => {
     list.innerHTML = sections()
-      .map((s) => `<label class="field-item"><input type="checkbox" data-section="${s.key}" ${state.sections[s.key] !== false ? "checked" : ""}> ${s.label}</label>`)
+      .map(
+        (s) =>
+          `<label class="field-item"><input type="checkbox" data-field="${s.key}" ${state.sections[s.key] !== false ? "checked" : ""}> ${s.label}</label>`,
+      )
       .join("");
   };
 
@@ -26,7 +32,7 @@
       if (!panel.hidden) render();
     });
     list.addEventListener("change", (e) => {
-      const key = e.target.dataset.section;
+      const key = e.target.dataset.field;
       if (key) state.sections[key] = e.target.checked;
       Invoice.view.applyVisibility();
     });
