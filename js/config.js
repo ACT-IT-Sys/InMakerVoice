@@ -11,6 +11,8 @@ window.InvoiceConfig = {
   exportSimpleWhenNoTax: true,
   signatureCity: "Lembar",
   defaultCompany: "PT. ACT GLOBAL FREIGHT SERVICES",
+  defaultCompanyAddress:
+    "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
   pdf: { margin: 0.5, format: "letter", scale: 2 },
 
   // Scalar options below can be overridden per layout (see layouts.config.js).

@@ -111,6 +111,7 @@
   padding: var(--box-pad);
 }
 [data-layout="modern-plus"] [data-group="info"] {
+  width: 420px;
   grid-area: info;
   display: grid;
   align-content: center;

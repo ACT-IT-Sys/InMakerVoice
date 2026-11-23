@@ -7,7 +7,16 @@
 //   precedence: global < layout < mode < layout's entry for that mode
 Object.assign(window.InvoiceConfig, {
   defaultLayoutId: "modern-plus",
-  docOrder: ["brand", "title", "meta", "items", "total", "terbilang", "transfer", "signature"],
+  docOrder: [
+    "brand",
+    "title",
+    "meta",
+    "items",
+    "total",
+    "terbilang",
+    "transfer",
+    "signature",
+  ],
   layouts: [
     {
       id: "modern-plus",
@@ -47,13 +56,22 @@ Object.assign(window.InvoiceConfig, {
             meta_tanggal: "Quotation Date",
             meta_berlakuHingga: "Validity Until",
           },
+          default: {
+            company: "PT. ACT GLOBAL FREIGHT SERVICES",
+            companyAddress:
+              "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
+          },
           placeholders: {
             signatureLead: "Sincerely Yours,",
-            transfer: "1. Rates quoted are in Indonesian Rupiah (IDR) and valid until the specified date above.\n2. Rates exclude Demurrage, Detention, Storage and Customs Inspection.",
+            transfer:
+              "1. Rates quoted are in Indonesian Rupiah (IDR) and valid until the specified date above.\n2. Rates exclude Demurrage, Detention, Storage and Customs Inspection.",
           },
           signatures: [
             { date: "Sincerely Yours," },
-            { date: "Accepted & Confirmed By,", role: "Authorized Signature & Stamp" },
+            {
+              date: "Accepted & Confirmed By,",
+              role: "Authorized Signature & Stamp",
+            },
           ],
         },
       },
@@ -64,7 +82,16 @@ Object.assign(window.InvoiceConfig, {
       id: "modern-corporate",
       name: "Modern Corporate",
       skin: "minimal",
-      docOrder: ["title", "brand", "meta", "items", "total", "terbilang", "signature", "transfer"],
+      docOrder: [
+        "title",
+        "brand",
+        "meta",
+        "items",
+        "total",
+        "terbilang",
+        "signature",
+        "transfer",
+      ],
     },
     { id: "bold-border", name: "Bold Border", skin: "boxed" },
     { id: "compact-clean", name: "Compact Clean", skin: "classic" },
