@@ -453,3 +453,28 @@ textarea {
 #totalBreakdown {
   display: contents;
 }
+
+/* PATRA */
+#invoiceSheet > div:nth-child(1) {
+  /* text-align: center; */
+  transform: translateX(-50%);
+  width: 100%;
+  scale: 1.3;
+  padding-left: 170%;
+}
+#invoiceSheet > div:nth-child(1) > div {
+  position: relative;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: flex-start;
+  justify-content: center;
+  align-items: center;
+}
+#companyNameInput,
+#companyAddress,
+#companyContact {
+  padding: inherit;
+}
+/* END PATRA */
