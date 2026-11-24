@@ -39,46 +39,17 @@ window.InvoiceLayouts["modern-plus"] = {
       },
       default: {
         company: "PT. ACT GLOBAL FREIGHT SERVICES",
-        companyAddress:
-          "Jl. Perak Timur No. 248, Surabaya 60165 | Telp. +62 31 3281530",
-        companyContact:
-          "Fax. +62 31 328 4364 | Email: info@actglobal-freight.com",
+        companyAddress: "Jl. Perak Timur No. 248, Surabaya 60165 | Telp. +62 31 3281530",
+        companyContact: "Fax. +62 31 328 4364 | Email: info@actglobal-freight.com",
       },
       placeholders: {
         signatureLead: "Sincerely Yours,",
-        transfer:
-          "1. Rates quoted are in Indonesian Rupiah (USD) and valid until the specified date above.\n2. Rates exclude Demurrage, Detention, Storage and Customs Inspection.",
+        transfer: "1. Rates quoted are in Indonesian Rupiah (USD) and valid until the specified date above.\n2. Rates exclude Demurrage, Detention, Storage and Customs Inspection.",
       },
       signatures: [
         { date: "Sincerely Yours," },
-        {
-          date: "Accepted & Confirmed By,",
-          role: "Authorized Signature & Stamp",
-        },
+        { date: "Accepted & Confirmed By,", role: "Authorized Signature & Stamp" },
       ],
     },
   },
 };
-window.InvoiceConfig.layouts = [
-  window.InvoiceLayouts["modern-plus"],
-  { id: "standard", name: "Standard Classic", skin: "classic" },
-  { id: "fit-two-bar", name: "Fit Two Bar", skin: "band" },
-  {
-    id: "modern-corporate",
-    name: "Modern Corporate",
-    skin: "minimal",
-    docOrder: [
-      "title",
-      "brand",
-      "meta",
-      "items",
-      "total",
-      "terbilang",
-      "signature",
-      "transfer",
-    ],
-  },
-  { id: "bold-border", name: "Bold Border", skin: "boxed" },
-  { id: "compact-clean", name: "Compact Clean", skin: "classic" },
-  { id: "elegant-serif", name: "Elegant Serif", skin: "editorial" },
-];

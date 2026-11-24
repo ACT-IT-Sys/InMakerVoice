@@ -1,0 +1,470 @@
+/* ===== Executive Freight : Route-Banner & Card Layout ===== */
+[data-layout="new-days"] {
+  /* --primary-color: #0f294a; */
+  --primary-color: #547bb9;
+  /* --accent-color: #e11d48; */
+  --accent-color: #ed7891;
+  --text-color: #1e293b;
+  --muted: #64748b;
+  --soft: #f8fafc;
+  --tint-blue: #f1f5f9;
+  --line: #cbd5e1;
+  --font-family: "Segoe UI", "Noto Sans", system-ui, sans-serif;
+  --pad: 32px;
+  --gap: 14px;
+  --fs: 13.5px;
+  --label-w: 118px;
+  --box-pad: 14px;
+  --radius: 8px;
+
+  color: var(--text-color);
+  font-variant-numeric: tabular-nums;
+  grid-template-columns: 1.15fr 0.85fr;
+  column-gap: 16px;
+  grid-template-areas:
+    "brand title"
+    "brand serial"
+    "customer info"
+    "shipment shipment"
+    "items items"
+    "total total"
+    "terbilang terbilang"
+    "transfer signature";
+}
+
+/* --- 1. Full-Bleed Top Navy Header Band --- */
+[data-layout="new-days"]::before {
+  content: "";
+  grid-row: brand / span 2;
+  grid-column: 1 / -1;
+  margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 18px;
+  /* background: var(--primary-color); */
+  background: #ffffff !important;
+  border-bottom: 4px solid var(--accent-color);
+}
+
+[data-layout="new-days"] [data-zone="brand"] {
+  align-items: flex-start;
+  padding-bottom: 24px;
+  color: #ffffff;
+}
+
+[data-layout="new-days"] .company-name-input {
+  font-size: 1.3em;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #000000;
+}
+
+[data-layout="new-days"]
+  [data-zone="brand"]
+  .editable:not(.company-name-input) {
+  /* color: #cbd5e1; */
+  color: #0009;
+  font-size: 0.9em;
+}
+
+[data-layout="new-days"] [data-zone="title"] {
+  margin-bottom: 0;
+  text-align: right;
+}
+
+[data-layout="new-days"] .invoice-title {
+  font-size: 1.85em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  color: #000000;
+}
+
+[data-layout="new-days"] [data-group="serial"] {
+  grid-area: serial;
+  align-self: start;
+  text-align: right;
+  padding-bottom: 24px;
+}
+
+[data-layout="new-days"] [data-group="serial"] .meta-label,
+[data-layout="new-days"] [data-group="serial"] .meta-value::before {
+  display: none;
+}
+
+[data-layout="new-days"] [data-group="serial"] .meta-row {
+  display: inline-block;
+}
+
+[data-layout="new-days"] [data-group="serial"] .editable {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.14);
+  font-weight: 600;
+  font-size: 0.98em;
+  color: #ffffff;
+  text-align: right;
+}
+
+/* --- 2. Two Separate Bordered Meta Cards --- */
+[data-layout="new-days"] [data-zone="meta"] {
+  display: contents;
+}
+
+[data-layout="new-days"] .meta-group {
+  display: block;
+}
+
+[data-layout="new-days"] [data-group="customer"],
+[data-layout="new-days"] [data-group="info"] {
+  padding: var(--box-pad);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--primary-color);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+[data-layout="new-days"] [data-group="customer"] [data-section="kepada"] {
+  display: block;
+  margin-bottom: 6px;
+}
+
+[data-layout="new-days"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.76em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+[data-layout="new-days"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label::after {
+  content: none;
+}
+
+[data-layout="new-days"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .editable {
+  font-size: 1.15em;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+[data-layout="new-days"] [data-group="customer"] [data-section="attn"],
+[data-layout="new-days"] [data-group="customer"] [data-section="email"] {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  gap: 4px;
+}
+
+[data-layout="new-days"] [data-group="info"] {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+}
+
+[data-layout="new-days"] [data-group="info"] .meta-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+}
+
+[data-layout="new-days"] [data-group="info"] .meta-label {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* --- 3. Trade-Lane & Shipment Highlight Strip --- */
+[data-layout="new-days"] [data-group="shipment"] {
+  grid-area: shipment;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 32px;
+  margin: var(--gap) 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent-color);
+  border-radius: var(--radius);
+  background: var(--tint-blue);
+}
+
+[data-layout="new-days"] [data-group="shipment"] .group-title {
+  display: block;
+  grid-column: 1 / -1;
+  margin-bottom: 6px;
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+[data-layout="new-days"] [data-group="shipment"] .meta-row {
+  display: grid;
+  grid-template-columns: var(--label-w) 1fr;
+  align-items: center;
+}
+
+[data-layout="new-days"] [data-group="shipment"] .meta-label {
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+[data-layout="new-days"] [data-group="shipment"] .meta-value::before {
+  content: ":";
+}
+
+[data-layout="new-days"] [data-group="shipment"] .editable {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* --- 4. Structured Pricing Table --- */
+[data-layout="new-days"] [data-zone="items"] {
+  margin-bottom: 0;
+}
+
+[data-layout="new-days"] .invoice-table th {
+  padding: 10px 10px;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-align: left;
+}
+
+[data-layout="new-days"] .invoice-table th:first-child {
+  border-top-left-radius: 6px;
+}
+
+[data-layout="new-days"] .invoice-table th:last-child {
+  border-top-right-radius: 6px;
+}
+
+[data-layout="new-days"] .invoice-table th:nth-child(1) {
+  width: 5%;
+  text-align: center;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(2) {
+  width: auto;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(3) {
+  width: 7%;
+  text-align: center;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(4) {
+  width: 8%;
+  text-align: center;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(5) {
+  width: 17%;
+  text-align: right;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(6) {
+  width: 8%;
+  text-align: center;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(7) {
+  width: 18%;
+  text-align: right;
+}
+[data-layout="new-days"] .invoice-table th:nth-child(8) {
+  width: 3%;
+}
+
+[data-layout="new-days"] .invoice-table td {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-layout="new-days"] .invoice-table td input {
+  padding: 10px 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-layout="new-days"] :is(.qty-input, .unit-input, .tax-input) {
+  text-align: center;
+}
+
+[data-layout="new-days"] .rate-input,
+[data-layout="new-days"] .amount-input {
+  text-align: right;
+}
+
+/* Muted italic styling for "At Cost" empty amount cells */
+[data-layout="new-days"] .amount-input:placeholder-shown {
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+[data-layout="new-days"] .category-row td {
+  background: var(--soft);
+  border-bottom: 1px solid var(--line);
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+[data-layout="new-days"] .category-input {
+  font-size: 0.82em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+/* --- 5. Totals Block --- */
+[data-layout="new-days"] [data-zone="total"] {
+  background: #547bb9;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  justify-self: end;
+  width: 38%;
+  min-width: 310px;
+  margin: 12px 0 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+[data-layout="new-days"] .tb-label,
+[data-layout="new-days"] .tb-value {
+  padding: 9px 14px;
+}
+
+[data-layout="new-days"] :is(.tb-label, .tb-value).tb-sub {
+  background: var(--soft);
+  border-bottom: 1px solid var(--line);
+  font-weight: 700;
+}
+
+[data-layout="new-days"] :is(.tb-label, .tb-value).tb-tax {
+  font-size: 0.9em;
+  color: var(--muted);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+[data-layout="new-days"] [data-zone="total"] > [data-label="total"],
+[data-layout="new-days"] #totalDisplay {
+  padding: 12px 14px;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-size: 1.15em;
+  font-weight: 800;
+}
+
+/* --- 6. Side-by-Side Footer: Terms Left, Signatures Right --- */
+[data-layout="new-days"] [data-zone="transfer"] {
+  grid-area: transfer;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--soft);
+  border: 1px solid #e2e8f0;
+  align-self: start;
+}
+
+[data-layout="new-days"] [data-zone="transfer"] strong {
+  font-size: 0.78em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary-color);
+}
+
+[data-layout="new-days"] #transferDetails {
+  margin-top: 6px;
+  font-size: 0.86em;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+[data-layout="new-days"] [data-zone="signature"] {
+  grid-area: signature;
+  justify-self: stretch;
+  align-self: end;
+  min-width: 0;
+  padding: 0;
+}
+
+[data-layout="new-days"] #signatureBlocks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+[data-layout="new-days"] .sig-block {
+  text-align: center;
+  font-size: 0.9em;
+}
+
+[data-layout="new-days"] .sig-block .editable {
+  text-align: center;
+}
+
+[data-layout="new-days"] .sig-party {
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+[data-layout="new-days"] .sig-name {
+  margin-top: 56px;
+  font-weight: 500;
+}
+
+[data-layout="new-days"] .sig-name:not(:placeholder-shown) {
+  text-decoration: underline;
+}
+
+[data-layout="new-days"] .sig-name:placeholder-shown {
+  width: 85%;
+  margin-inline: auto;
+  border-bottom: 1px solid var(--text-color);
+}
+
+/* --- Export & Print Fidelity --- */
+body.exporting
+  [data-layout="new-days"]
+  :is(
+    .qty-input,
+    .unit-input,
+    .rate-input,
+    .tax-input,
+    .amount-input
+  )::placeholder {
+  color: var(--muted);
+}
+
+body.exporting [data-layout="new-days"] .sig-name:placeholder-shown {
+  border-bottom-color: var(--text-color);
+}
+
+@media print {
+  [data-layout="new-days"] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  [data-layout="new-days"]
+    :is(
+      .qty-input,
+      .unit-input,
+      .rate-input,
+      .tax-input,
+      .amount-input
+    )::placeholder {
+    color: var(--muted);
+  }
+  [data-layout="new-days"] .sig-name:placeholder-shown {
+    border-bottom-color: var(--text-color);
+  }
+}

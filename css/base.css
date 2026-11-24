@@ -301,7 +301,7 @@ textarea {
 .editable {
   box-sizing: border-box;
   width: 100%;
-  padding: 4px 8px;
+  padding: 2px 8px; /* padding-left 4px is reserved for the colon */
   border: 0;
   border-bottom: 1px dashed transparent;
   background: transparent;

@@ -1,0 +1,67 @@
+window.InvoiceLayouts = window.InvoiceLayouts || {};
+window.InvoiceLayouts["new-days"] = {
+  id: "new-days",
+  name: "New Days",
+  skin: "band",
+  taxMode: "exclusive",
+  affixInputs: true,
+  dateFormat: "short",
+  sections: {
+    terbilang: false,
+    companyAddress: true,
+    companyContact: true,
+    attn: true,
+    email: true,
+    rateRef: true,
+    salesExec: true,
+    serviceType: true,
+    portLoading: true,
+    portDischarge: true,
+    commodity: true,
+    signatureParty: true,
+    signatureRole: true,
+  },
+  placeholders: {
+    qty: "-",
+    unit: "-",
+    rate: "-",
+    tax: "-",
+    amount: "At Cost",
+  },
+  modes: {
+    quotation: {
+      sections: { perihal: false, logo: true },
+      labels: {
+        title: "QUOTATION",
+        description: "CHARGE DESCRIPTION",
+        rate: "RATE",
+        amount: "AMOUNT",
+        total: "Grand Total:",
+        transfer: "TERMS & CONDITIONS",
+        group_shipment: "TRADE LANE & CARGO SPECIFICATIONS",
+        meta_kepada: "PREPARED FOR",
+        meta_tanggal: "Issue Date",
+        meta_berlakuHingga: "Valid Until",
+      },
+      default: {
+        company: "PT. ACT GLOBAL FREIGHT SERVICES",
+        companyAddress:
+          "Jl. Perak Timur No. 248, Surabaya 60165 | Telp. +62 31 3281530",
+        companyContact:
+          "Fax. +62 31 328 4364 | Email: info@actglobal-freight.com",
+      },
+      placeholders: {
+        signatureLead: "Sincerely Yours,",
+        transfer:
+          "1. Rates quoted are valid until the specified date above, subject to space and equipment availability.\n2. Rates exclude Demurrage, Detention, Storage, Customs Inspection, or unforeseen port charges.\n3. Cargo insurance is optional and must be requested in writing prior to ETD.",
+      },
+      signatures: [
+        { date: "Sincerely Yours," },
+        {
+          date: "Accepted & Confirmed By,",
+          role: "Authorized Signature & Stamp",
+        },
+      ],
+    },
+  },
+};

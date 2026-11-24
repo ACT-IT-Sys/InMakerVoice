@@ -15,7 +15,7 @@ window.InvoiceConfig = {
   defaultCompanyAddress:
     "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
   pdf: { margin: 0.5, format: "a4", scale: 1 },
-  print: { scale: 0.7 },
+  print: { scale: 0.83 },
   taxMode: "inclusive",
   affixInputs: false,
   taxSuffix: "%",

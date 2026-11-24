@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/skins.css" />
     <link rel="stylesheet" href="css/layouts/modern-plus.css" />
+    <link rel="stylesheet" href="css/layouts/new-days.css" />
     <link rel="stylesheet" href="css/print.css" />
     <script src="https://cdn.jsdelivr.net/npm/snapdom@1.9.8/dist/snapdom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docx@9.1.0/build/index.umd.js"></script>
@@ -15,14 +16,22 @@
   <body>
     <div class="sticky-header">
       <div class="header-group-left">
-        <button class="btn" type="button" data-export="print">🖨️ Cetak / Print</button>
-        <button class="btn" type="button" data-export="xlsx">📊 Save as .xlsx</button>
-        <button class="btn" type="button" data-export="doc">📄 Save as .doc</button>
-        <button class="btn" type="button" data-export="pdf">📥 Save as .pdf</button>
+        <button class="btn" type="button" data-export="print">
+          🖨️ Cetak / Print
+        </button>
+        <button class="btn" type="button" data-export="xlsx">
+          📊 Save as .xlsx
+        </button>
+        <button class="btn" type="button" data-export="doc">
+          📄 Save as .doc
+        </button>
+        <button class="btn" type="button" data-export="pdf">
+          📥 Save as .pdf
+        </button>
       </div>
       <div class="header-group-right">
         <div class="control-item">
-          <label>Mode:</label>
+          <!-- <label>Mode:</label> -->
           <button type="button" class="btn" id="modeToggle">Quotation</button>
         </div>
         <div class="control-item">
@@ -36,18 +45,50 @@
         <button class="btn" id="fieldsBtn" type="button">Fields</button>
         <div id="fieldsPanel" class="fields-panel">
           <div id="fieldsList"></div>
-          <label class="field-item"><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax columns</label>
-          <button type="button" id="fieldsReset" class="btn">Reset to layout defaults</button>
+          <label class="field-item"
+            ><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax
+            columns</label
+          >
+          <button type="button" id="fieldsReset" class="btn">
+            Reset to layout defaults
+          </button>
         </div>
       </div>
     </div>
-    <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
+    <div
+      class="invoice-container"
+      id="invoiceSheet"
+      data-layout="standard"
+      data-skin="classic"
+    >
       <div data-zone="brand">
-        <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" role="button" tabindex="0" />
+        <img
+          id="logoPreview"
+          data-section="logo"
+          class="invoice-logo"
+          alt="Logo"
+          role="button"
+          tabindex="0"
+        />
         <div class="brand-text">
-          <input type="text" id="companyNameInput" data-section="companyName" class="editable company-name-input" />
-          <input type="text" id="companyAddress" data-section="companyAddress" class="editable company-line" />
-          <input type="text" id="companyContact" data-section="companyContact" class="editable company-line" />
+          <input
+            type="text"
+            id="companyNameInput"
+            data-section="companyName"
+            class="editable company-name-input"
+          />
+          <input
+            type="text"
+            id="companyAddress"
+            data-section="companyAddress"
+            class="editable company-line"
+          />
+          <input
+            type="text"
+            id="companyContact"
+            data-section="companyContact"
+            class="editable company-line"
+          />
         </div>
       </div>
       <div data-zone="title">
@@ -70,7 +111,12 @@
           </thead>
           <tbody id="tableBody"></tbody>
         </table>
-        <button class="btn btn-primary no-print add-row" id="addRowButton" type="button" data-label="addRow"></button>
+        <button
+          class="btn btn-primary no-print add-row"
+          id="addRowButton"
+          type="button"
+          data-label="addRow"
+        ></button>
       </div>
       <div data-zone="total">
         <div id="totalBreakdown"></div>
@@ -80,7 +126,12 @@
       <div data-zone="terbilang" data-section="terbilang">
         <strong data-label="terbilang"></strong>
         <div class="terbilang-container">
-          <textarea id="terbilangField" class="editable" rows="1" readonly></textarea>
+          <textarea
+            id="terbilangField"
+            class="editable"
+            rows="1"
+            readonly
+          ></textarea>
           <label class="terbilang-lock-wrapper no-print">
             <span data-label="lock"></span>
             <input type="checkbox" id="terbilangLock" checked />
@@ -93,12 +144,16 @@
       </div>
       <div data-zone="signature">
         <div id="signatureBlocks"></div>
-        <button type="button" class="btn no-print" id="addSignature">+ Signature</button>
+        <button type="button" class="btn no-print" id="addSignature">
+          + Signature
+        </button>
       </div>
     </div>
     <input type="file" id="logoFile" accept="image/*" hidden />
     <script src="js/config.js"></script>
     <script src="js/layouts/modern-plus.js"></script>
+    <script src="js/layouts/new-days.js"></script>
+    <script src="js/layouts/index.js"></script>
     <script src="js/core.js"></script>
     <script src="js/exporters.js"></script>
     <script src="js/table.js"></script>

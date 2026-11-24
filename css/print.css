@@ -52,4 +52,15 @@ body.exporting ::placeholder {
   ::placeholder {
     color: transparent;
   }
+  @media print {
+    /* Firefox */
+    * {
+      scrollbar-width: none;
+    }
+
+    /* Chrome, Edge, Safari, and Opera */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
