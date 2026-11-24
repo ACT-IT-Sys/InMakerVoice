@@ -1,13 +1,14 @@
-// Core settings. Structured lists live in their own files:
-//   fields.config.js (meta/signature fields) · modes.config.js (invoice/quotation) · layouts.config.js
+// Core settings + modes + fields + layout registry.
+// Modern+ overrides live in layouts/modern-plus.js
 window.InvoiceConfig = {
   locale: "id-ID",
-  currency: "Rp",
+  currency: "IDR",
+  currencies: { IDR: "Rp", USD: "USD" },
   currencyWord: "Rupiah",
+  currencyWords: { IDR: "Rupiah", USD: "Dolar AS" }, // terbilang suffix per currency
+  currencyDecimals: { IDR: 0, USD: 2 }, // rounding + max typed decimals per currency
   filePrefix: "Invoice",
-  // Flexible filename template. Placeholders: {mode} {serial} {weightVolume} {incoterms} {company} {date}
   fileNameTemplate: "{mode} - {serial} - ({weightVolume} - {incoterms})",
-  // When tax is blank and qty === 1, export shows only amount (config-tunable)
   exportSimpleWhenNoTax: true,
   signatureCity: "Lembar",
   defaultCompany: "PT. ACT GLOBAL FREIGHT SERVICES",
@@ -15,27 +16,12 @@ window.InvoiceConfig = {
     "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
   pdf: { margin: 0.5, format: "a4", scale: 1 },
   print: { scale: 0.7 },
-
-  // Scalar options below can be overridden per layout (see layouts.config.js).
-  //   taxMode     : "inclusive" = amount = qty × rate × (1 + tax); "exclusive" = amount = qty × rate,
-  //                 tax is summarised per rate in the totals block.
-  //   affixInputs : rate/amount inputs show the currency prefix, tax shows the suffix.
-  //   dateFormat  : "long" (20 November 2026) | "short" (20/11/2026)
   taxMode: "inclusive",
   affixInputs: false,
   taxSuffix: "%",
   dateFormat: "long",
-
-  // Textareas that grow with their content.
   autosizeFields: ["terbilangField", "transferDetails"],
-
-  // Toolbar buttons. Missing key = visible; false = hidden.
   exports: { print: true, pdf: false, doc: false, xlsx: false },
-
-  // Content visibility (global). Missing key = visible; false = hidden.
-  // Hideable keys are the [data-section] values in index.html, meta field keys and signature fields.
-  // "items" and "total" are protected (not hideable); unknown keys are ignored with a console warning.
-  // Precedence: global < layout < mode < layout's entry for that mode.
   sections: {
     logo: true,
     companyName: true,
@@ -62,8 +48,6 @@ window.InvoiceConfig = {
     signatureName: true,
     signatureRole: false,
   },
-
-  // Base labels. Meta row labels use `meta_<key>`, group headings use `group_<group>`.
   labels: {
     title: "INVOICE",
     no: "NO",
@@ -99,8 +83,6 @@ window.InvoiceConfig = {
     meta_commodity: "Commodity",
     meta_weightVolume: "Weight / Volume",
   },
-
-  // Placeholder text. {city} and {date} are filled in where used.
   placeholders: {
     company: "CV. atau PT. Nama",
     companyAddress: "Alamat perusahaan",
@@ -117,7 +99,6 @@ window.InvoiceConfig = {
     signatureName: "( Nama Jelas & Tanda Tangan )",
     signatureRole: "Jabatan",
   },
-
   monthNames: [
     "Januari",
     "Februari",
@@ -132,7 +113,6 @@ window.InvoiceConfig = {
     "November",
     "Desember",
   ],
-
   logos: [
     { file: "img/L1.webp", name: "Logo 1" },
     { file: "img/L2.webp", name: "Logo 2" },
@@ -141,4 +121,103 @@ window.InvoiceConfig = {
   ],
   defaultLogoFile: "img/L1.webp",
   defaultDocumentType: "quotation",
+  metaGroups: ["info", "customer", "serial", "shipment"],
+  metaFields: [
+    { key: "perihal", group: "info", placeholder: "Contoh: Tagihan Ocean" },
+    { key: "tanggal", group: "info" },
+    {
+      key: "jatuhTempo",
+      group: "info",
+      placeholder: "Contoh: 14 hari setelah invoice",
+    },
+    {
+      key: "berlakuHingga",
+      group: "info",
+      placeholder: "Contoh: 30 hari sejak tanggal penawaran",
+    },
+    { key: "rateRef", group: "info", placeholder: "DW00001" },
+    { key: "salesExec", group: "info", placeholder: "Contoh: Dino Widiono" },
+    {
+      key: "kepada",
+      group: "customer",
+      placeholder: "Contoh: INDOREX di Tempat",
+    },
+    { key: "attn", group: "customer", placeholder: "Contoh: Bu Silvy" },
+    { key: "email", group: "customer", placeholder: "nama@perusahaan.co.id" },
+    { key: "serial", group: "serial", placeholder: "QT-2026-DW00001" },
+    { key: "serviceType", group: "shipment", placeholder: "FCL Import" },
+    { key: "incoterms", group: "shipment", placeholder: "FOB Tianjin" },
+    {
+      key: "portLoading",
+      group: "shipment",
+      placeholder: "Xingang, Tianjin, China (CNTXG)",
+    },
+    {
+      key: "portDischarge",
+      group: "shipment",
+      placeholder: "Tanjung Perak, Surabaya, Indonesia (IDSUB)",
+    },
+    { key: "commodity", group: "shipment", placeholder: "general commodity" },
+    { key: "weightVolume", group: "shipment", placeholder: "1x40HC" },
+  ],
+  companyLines: ["companyAddress", "companyContact"],
+  signatureFields: [
+    { key: "date", section: "signatureDate", placeholder: "signatureLead" },
+    { key: "party", section: "signatureParty", placeholder: "signatureParty" },
+    { key: "name", section: "signatureName", placeholder: "signatureName" },
+    { key: "role", section: "signatureRole", placeholder: "signatureRole" },
+  ],
+  defaultSignatures: [{}],
+  placeholderTargets: {
+    "#companyNameInput": "company",
+    "#companyAddress": "companyAddress",
+    "#companyContact": "companyContact",
+    "#transferDetails": "transfer",
+    ".desc-input": "item",
+    ".category-input": "category",
+    ".qty-input": "qty",
+    ".unit-input": "unit",
+    ".rate-input": "rate",
+    ".tax-input": "tax",
+  },
+  modes: {
+    invoice: {
+      filePrefix: "Invoice",
+      currency: "IDR",
+      labels: {
+        title: "INVOICE",
+        amount: "AMOUNT (IDR)",
+        transfer: "Transfer details:",
+        meta_perihal: "Subject",
+      },
+      placeholders: { transfer: "Enter bank transfer instructions here..." },
+      sections: { jatuhTempo: true, berlakuHingga: false, transfer: true },
+    },
+    quotation: {
+      filePrefix: "Quotation",
+      currency: "USD",
+      labels: {
+        title: "QUOTATION",
+        amount: "AMOUNT (USD)",
+        transfer: "Terms & Conditions:",
+        meta_perihal: "Subject",
+      },
+      placeholders: {
+        transfer: "Example: Prices exclude VAT. 50% deposit required...",
+      },
+      sections: { jatuhTempo: false, berlakuHingga: true, transfer: true },
+    },
+  },
+  defaultLayoutId: "modern-plus",
+  docOrder: [
+    "brand",
+    "title",
+    "meta",
+    "items",
+    "total",
+    "terbilang",
+    "transfer",
+    "signature",
+  ],
+  layouts: [], // filled by layouts/index.js or modern-plus.js
 };

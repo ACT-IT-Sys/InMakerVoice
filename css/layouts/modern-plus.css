@@ -3,7 +3,7 @@
    so each group becomes its own grid item. Sizes/colors are tokens at the top of the block. */
 [data-layout="modern-plus"] {
   --primary-color: #1b2a5c;
-  --accent-color: #f26b1d;
+  --accent-color: #ff4147;
   --text-color: #1f2937;
   --muted: #6b7280;
   --soft: #f5f7fb;
@@ -135,7 +135,10 @@
   display: block;
   margin-bottom: 6px;
 }
-[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .meta-label {
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label {
   display: block;
   font-size: 0.82em;
   font-weight: 500;
@@ -143,10 +146,16 @@
   text-transform: uppercase;
   color: var(--muted);
 }
-[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .meta-label::after {
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .meta-label::after {
   content: none;
 }
-[data-layout="modern-plus"] [data-group="customer"] [data-section="kepada"] .editable {
+[data-layout="modern-plus"]
+  [data-group="customer"]
+  [data-section="kepada"]
+  .editable {
   font-size: 1.2em;
   font-weight: 700;
   color: #0f172a;

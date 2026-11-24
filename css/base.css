@@ -23,7 +23,7 @@
   display: none !important;
 }
 
- /* config-driven hiding must beat any display rule */
+/* config-driven hiding must beat any display rule */
 
 body {
   font-family: var(--font-family);
@@ -184,8 +184,8 @@ textarea {
 }
 
 .invoice-logo {
-  height: 45px;
-  max-width: 120px;
+  height: auto;
+  max-width: 90px;
   object-fit: contain;
 }
 

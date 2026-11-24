@@ -6,11 +6,6 @@
     <title>Invoice Maker</title>
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/skins.css" />
-    <link rel="stylesheet" href="css/layouts/fit-two-bar.css" />
-    <link rel="stylesheet" href="css/layouts/modern-corporate.css" />
-    <link rel="stylesheet" href="css/layouts/bold-border.css" />
-    <link rel="stylesheet" href="css/layouts/compact-clean.css" />
-    <link rel="stylesheet" href="css/layouts/elegant-serif.css" />
     <link rel="stylesheet" href="css/layouts/modern-plus.css" />
     <link rel="stylesheet" href="css/print.css" />
     <script src="https://cdn.jsdelivr.net/npm/snapdom@1.9.8/dist/snapdom.min.js"></script>
@@ -19,7 +14,6 @@
   </head>
   <body>
     <div class="sticky-header">
-      <!-- Visibility of these buttons is controlled by `exports` in config.js -->
       <div class="header-group-left">
         <button class="btn" type="button" data-export="print">🖨️ Cetak / Print</button>
         <button class="btn" type="button" data-export="xlsx">📊 Save as .xlsx</button>
@@ -28,8 +22,8 @@
       </div>
       <div class="header-group-right">
         <div class="control-item">
-          <label for="modeSelect">Mode:</label>
-          <select id="modeSelect" class="header-select"></select>
+          <label>Mode:</label>
+          <button type="button" class="btn" id="modeToggle">Quotation</button>
         </div>
         <div class="control-item">
           <label for="logoSelect">Logo:</label>
@@ -41,19 +35,12 @@
         </div>
         <button class="btn" id="fieldsBtn" type="button">Fields</button>
         <div id="fieldsPanel" class="fields-panel">
-          <div class="fields-header">Field visibility</div>
           <div id="fieldsList"></div>
           <label class="field-item"><input type="checkbox" id="rateTaxToggle" checked /> Rate + Tax columns</label>
           <button type="button" id="fieldsReset" class="btn">Reset to layout defaults</button>
         </div>
       </div>
     </div>
-
-    <!--
-      Zones ([data-zone]) are positioned by each layout's grid-template-areas in style.css.
-      Hideable pieces carry [data-section="key"]; keys are controlled from config.js.
-      Text, placeholders and meta rows are filled from config by main.js.
-    -->
     <div class="invoice-container" id="invoiceSheet" data-layout="standard" data-skin="classic">
       <div data-zone="brand">
         <img id="logoPreview" data-section="logo" class="invoice-logo" alt="Logo" role="button" tabindex="0" />
@@ -63,13 +50,10 @@
           <input type="text" id="companyContact" data-section="companyContact" class="editable company-line" />
         </div>
       </div>
-
       <div data-zone="title">
         <div id="invoiceTitle" data-section="title" class="invoice-title"></div>
       </div>
-
       <div data-zone="meta" id="metaZone"></div>
-
       <div data-zone="items">
         <table class="invoice-table" id="itemsTable">
           <thead>
@@ -88,51 +72,37 @@
         </table>
         <button class="btn btn-primary no-print add-row" id="addRowButton" type="button" data-label="addRow"></button>
       </div>
-
       <div data-zone="total">
         <div id="totalBreakdown"></div>
         <span data-label="total"></span>
         <span id="totalDisplay"></span>
       </div>
-
       <div data-zone="terbilang" data-section="terbilang">
         <strong data-label="terbilang"></strong>
         <div class="terbilang-container">
           <textarea id="terbilangField" class="editable" rows="1" readonly></textarea>
-          <label class="terbilang-lock-wrapper no-print" title="Ceklis untuk mengunci input Terbilang">
+          <label class="terbilang-lock-wrapper no-print">
             <span data-label="lock"></span>
             <input type="checkbox" id="terbilangLock" checked />
           </label>
         </div>
       </div>
-
       <div data-zone="transfer" data-section="transfer">
         <strong data-label="transfer"></strong>
         <textarea id="transferDetails" class="editable" rows="3"></textarea>
       </div>
-
       <div data-zone="signature">
         <div id="signatureBlocks"></div>
         <button type="button" class="btn no-print" id="addSignature">+ Signature</button>
       </div>
     </div>
-
     <input type="file" id="logoFile" accept="image/*" hidden />
-
     <script src="js/config.js"></script>
-    <script src="js/fields.config.js"></script>
-    <script src="js/modes.config.js"></script>
-    <script src="js/layouts/modern-plus.config.js"></script>
-    <script src="js/layouts/index.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/terbilang.js"></script>
-    <script src="js/totals.js"></script>
+    <script src="js/layouts/modern-plus.js"></script>
+    <script src="js/core.js"></script>
     <script src="js/exporters.js"></script>
     <script src="js/table.js"></script>
-    <script src="js/signatures.js"></script>
-    <script src="js/logo.js"></script>
-    <script src="js/view.js"></script>
-    <script src="js/fields-panel.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
