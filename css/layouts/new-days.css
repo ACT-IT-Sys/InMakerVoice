@@ -398,7 +398,7 @@
 }
 
 [data-layout="new-days"] #signatureBlocks {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
 }
@@ -427,7 +427,8 @@
 }
 
 [data-layout="new-days"] .sig-name:placeholder-shown {
-  width: 85%;
+  width: 185px;
+  max-width: 85%;
   margin-inline: auto;
   border-bottom: 1px solid var(--text-color);
 }
