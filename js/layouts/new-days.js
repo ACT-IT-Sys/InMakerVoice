@@ -32,7 +32,7 @@ window.InvoiceLayouts["new-days"] = {
     quotation: {
       sections: { perihal: false, logo: true },
       labels: {
-        title: "QUOTATION",
+        title: "FREIGHT QUOTATION",
         description: "CHARGE DESCRIPTION",
         rate: "RATE",
         amount: "AMOUNT",
@@ -45,22 +45,16 @@ window.InvoiceLayouts["new-days"] = {
       },
       default: {
         company: "PT. ACT GLOBAL FREIGHT SERVICES",
-        companyAddress:
-          "Jl. Perak Timur No. 248, Surabaya 60165 | Telp. +62 31 3281530",
-        companyContact:
-          "Fax. +62 31 328 4364 | Email: info@actglobal-freight.com",
+        companyAddress: "Jl. Perak Timur No. 248, Surabaya 60165 | Telp. +62 31 3281530",
+        companyContact: "Fax. +62 31 328 4364 | Email: info@actglobal-freight.com",
       },
       placeholders: {
         signatureLead: "Sincerely Yours,",
-        transfer:
-          "1. Rates quoted are valid until the specified date above, subject to space and equipment availability.\n2. Rates exclude Demurrage, Detention, Storage, Customs Inspection, or unforeseen port charges.\n3. Cargo insurance is optional and must be requested in writing prior to ETD.",
+        transfer: "1. Rates quoted are valid until the specified date above, subject to space and equipment availability.\n2. Rates exclude Demurrage, Detention, Storage, Customs Inspection, or unforeseen port charges.\n3. Cargo insurance is optional and must be requested in writing prior to ETD.",
       },
       signatures: [
         { date: "Sincerely Yours," },
-        {
-          date: "Accepted & Confirmed By,",
-          role: "Authorized Signature & Stamp",
-        },
+        { date: "Accepted & Confirmed By,", role: "Authorized Signature & Stamp" },
       ],
     },
   },

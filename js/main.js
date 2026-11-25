@@ -9,7 +9,11 @@
   view.applyMode();
 
   table.bind();
-  view.bind(); // also binds the fields panel, logo picker and signature blocks
+  view.bind();
+  if (Invoice.json) {
+    document.getElementById("saveJson").onclick = Invoice.json.save;
+    document.getElementById("loadJson").onclick = Invoice.json.load;
+  } // also binds the fields panel, logo picker and signature blocks
 
   // Export buttons — attach only if the exporter exists, otherwise log clearly.
   $$("[data-export]").forEach((btn) => {

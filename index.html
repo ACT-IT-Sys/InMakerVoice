@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/skins.css" />
     <link rel="stylesheet" href="css/layouts/modern-plus.css" />
-    <link rel="stylesheet" href="css/layouts/new-days.css" />
     <link rel="stylesheet" href="css/print.css" />
     <script src="https://cdn.jsdelivr.net/npm/snapdom@1.9.8/dist/snapdom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docx@9.1.0/build/index.umd.js"></script>
@@ -28,10 +27,12 @@
         <button class="btn" type="button" data-export="pdf">
           📥 Save as .pdf
         </button>
+        <button class="btn" type="button" id="saveJson">💾 Save DRAFT</button>
+        <button class="btn" type="button" id="loadJson">📂 Load DRAFT</button>
       </div>
       <div class="header-group-right">
         <div class="control-item">
-          <!-- <label>Mode:</label> -->
+          <label>Mode:</label>
           <button type="button" class="btn" id="modeToggle">Quotation</button>
         </div>
         <div class="control-item">
@@ -158,6 +159,7 @@
     <script src="js/exporters.js"></script>
     <script src="js/table.js"></script>
     <script src="js/ui.js"></script>
+    <script src="js/json.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>

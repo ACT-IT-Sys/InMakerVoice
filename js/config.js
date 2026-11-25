@@ -3,19 +3,21 @@
 window.InvoiceConfig = {
   locale: "id-ID",
   currency: "IDR",
-  currencies: { IDR: "Rp", USD: "USD" },
+  currencies: { IDR: "Rp", USD: "$" },
   currencyWord: "Rupiah",
   currencyWords: { IDR: "Rupiah", USD: "Dolar AS" }, // terbilang suffix per currency
   currencyDecimals: { IDR: 0, USD: 2 }, // rounding + max typed decimals per currency
   filePrefix: "Invoice",
   fileNameTemplate: "{mode} - {serial} - ({weightVolume} - {incoterms})",
+  jsonNameTemplate: "{kepada}.json",
+  jsonOverwrite: true,
   exportSimpleWhenNoTax: true,
   signatureCity: "Lembar",
   defaultCompany: "PT. ACT GLOBAL FREIGHT SERVICES",
   defaultCompanyAddress:
     "Jalan Perak Timur No. 248, Tg. Perak, Surabaya - Indonesia 60165",
   pdf: { margin: 0.5, format: "a4", scale: 1 },
-  print: { scale: 0.83 },
+  print: { scale: 0.7 },
   taxMode: "inclusive",
   affixInputs: false,
   taxSuffix: "%",
