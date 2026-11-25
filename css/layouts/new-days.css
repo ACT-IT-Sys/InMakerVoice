@@ -1,7 +1,9 @@
 /* ===== Executive Freight : Route-Banner & Card Layout ===== */
 [data-layout="new-days"] {
-  --primary-color: #0f294a;
-  --accent-color: #e11d48;
+  /* --primary-color: #0f294a; */
+  --primary-color: #547bb9;
+  /* --accent-color: #e11d48; */
+  --accent-color: #ed7891;
   --text-color: #1e293b;
   --muted: #64748b;
   --soft: #f8fafc;
@@ -36,7 +38,8 @@
   grid-row: brand / span 2;
   grid-column: 1 / -1;
   margin: calc(var(--pad) * -1) calc(var(--pad) * -1) 18px;
-  background: var(--primary-color);
+  /* background: var(--primary-color); */
+  background: #ffffff !important;
   border-bottom: 4px solid var(--accent-color);
 }
 
@@ -51,13 +54,14 @@
   font-weight: 800;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: #ffffff;
+  color: #000000;
 }
 
 [data-layout="new-days"]
   [data-zone="brand"]
   .editable:not(.company-name-input) {
-  color: #cbd5e1;
+  /* color: #cbd5e1; */
+  color: #0009;
   font-size: 0.9em;
 }
 
@@ -71,7 +75,7 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 1.1;
-  color: #ffffff;
+  color: #000000;
 }
 
 [data-layout="new-days"] [data-group="serial"] {
@@ -305,8 +309,8 @@
 [data-layout="new-days"] .category-row td {
   background: var(--soft);
   border-bottom: 1px solid var(--line);
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 [data-layout="new-days"] .category-input {
@@ -319,6 +323,7 @@
 
 /* --- 5. Totals Block --- */
 [data-layout="new-days"] [data-zone="total"] {
+  background: #547bb9;
   display: grid;
   grid-template-columns: 1fr auto;
   justify-self: end;
